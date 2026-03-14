@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeGuard | SGMS Anti-Harassment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --emergency: #991b1b;
+            --alert: #dc2626;
+            --glass-white: rgba(255, 255, 255, 0.1);
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            margin: 0; 
+            background: #000; /* Serious Black for depth */
+            background: linear-gradient(180deg, #450a0a 0%, #000000 100%);
+            color: #fee2e2;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(153, 27, 27, 0.2);
+            border: 1px solid var(--alert);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 25px;
+            margin-bottom: 30px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .case-card {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 30px;
+            border-radius: 25px;
+            margin-bottom: 25px;
+            border-left: 12px solid var(--emergency);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        /* Evidence Section Styling */
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px dashed #cbd5e1;
+        }
+
+        .evidence-item {
+            background: #cbd5e1;
+            height: 100px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #475569;
+            border: 1px solid #94a3b8;
+        }
+
+        .incident-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+
+        .detail-box {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .detail-box strong { color: var(--emergency); display: block; margin-bottom: 4px; }
+
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+
+        .btn-action {
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-red { background: var(--emergency); color: white; }
+        .btn-blue { background: #1e40af; color: white; }
+        .btn-green { background: #15803d; color: white; }
+
+        .badge-stalking { background: #fee2e2; color: #991b1b; padding: 5px 12px; border-radius: 20px; font-weight: 800; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div>
+        <h1 style="margin:0;">🚨 Internal Safety & Vigilance</h1>
+        <p style="margin:5px 0 0; opacity: 0.8;">Monitoring Stalking, Starring, and Non-Consensual Following Cases</p>
+    </div>
+    <a href="admindashboard.html" style="color: white; font-weight: 700; text-decoration: none;">Dashboard</a>
+</div>
+
+<div id="grievanceDisplay">
+    </div>
+
+<script>
+    function loadSafetyPortal() {
+        const list = JSON.parse(localStorage.getItem('grievances')) || [];
+        const container = document.getElementById('grievanceDisplay');
+        const bullyingCases = list.filter(i => i.category.includes('URGENT'));
+
+        if(bullyingCases.length === 0) {
+            container.innerHTML = "<div style='text-align:center; padding:50px;'><h3>No high-priority security threats logged.</h3></div>";
+            return;
+        }
+
+        container.innerHTML = bullyingCases.map((item, index) => {
+            const isStalking = item.text.toLowerCase().includes('stalk') || item.text.toLowerCase().includes('follow');
+            
+            return `
+                <div class="case-card">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div>
+                            <span class="badge-stalking">${isStalking ? '❗ STALKING/FOLLOWING' : '⚠️ HARASSMENT'}</span>
+                            <h2 style="margin:15px 0 5px 0;">Case Subject: ${item.name}</h2>
+                            <p style="margin:0; opacity:0.7;">Student PRN: ${item.prn} | Date: ${item.date}</p>
+                        </div>
+                        <div style="text-align:right">
+                            <span style="font-weight:800; color:var(--emergency)">STATUS: ${item.status}</span>
+                        </div>
+                    </div>
+
+                    <div style="margin: 20px 0; background: #fff1f2; padding: 20px; border-radius: 15px; border: 1px solid #fecaca;">
+                        <strong style="display:block; margin-bottom:10px;">STUDENT STATEMENT:</strong>
+                        <p style="font-size: 16px; font-style: italic; color: #450a0a;">"${item.text}"</p>
+                    </div>
+
+                    <div class="incident-details">
+                        <div class="detail-box">
+                            <strong>📍 Location Hotspot</strong>
+                            Canteen Back-Exit / Library Corridor
+                        </div>
+                        <div class="detail-box">
+                            <strong>🕒 Estimated Time</strong>
+                            12:45 PM - 02:00 PM (Recurring)
+                        </div>
+                        <div class="detail-box">
+                            <strong>👥 Potential Witnesses</strong>
+                            2-3 Students nearby (Names Confidential)
+                        </div>
+                        <div class="detail-box">
+                            <strong>🛑 Severity Level</strong>
+                            CRITICAL (Physical Safety at Risk)
+                        </div>
+                    </div>
+
+                    <div style="margin-top:20px;">
+                        <strong>📁 ATTACHED EVIDENCE (Images/Screenshots):</strong>
+                        <div class="evidence-grid">
+                            <div class="evidence-item">IMG_001.jpg<br>(Chat Log)</div>
+                            <div class="evidence-item">SCREENSHOT_78.png<br>(Evidence)</div>
+                            <div class="evidence-item" style="border: 2px dashed #94a3b8; background: #e2e8f0;">+ Add Admin Note</div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn-action btn-red" onclick="alert('College Security has been dispatched to the hotspot.')">⚡ DISPATCH SECURITY</button>
+                        <button class="btn-action btn-blue" onclick="alert('CCTV Archives for this timestamp are now locked.')">📹 LOCK CCTV FOOTAGE</button>
+                        <button class="btn-action btn-blue" onclick="alert('Summons sent to the Accused via HOD.')">📝 SUMMON ACCUSED</button>
+                        <button class="btn-action btn-green" onclick="resolveCase(${index})">✅ RESOLVE CASE</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function resolveCase(idx) {
+        let list = JSON.parse(localStorage.getItem('grievances'));
+        list[idx].status = 'Resolved';
+        localStorage.setItem('grievances', JSON.stringify(list));
+        loadSafetyPortal();
+    }
+
+    loadSafetyPortal();
+</script>
+
+</body>
+</html>
