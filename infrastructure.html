@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infrastructure Dept | SGMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --dept-color: #d97706; --glass: rgba(255, 255, 255, 0.1); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: linear-gradient(135deg, #92400e, #f59e0b); color: white; min-height: 100vh; padding: 30px; }
+        .header-box { background: var(--glass); backdrop-filter: blur(10px); padding: 30px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .head-info h2 { margin: 0; color: #fef3c7; }
+        .report-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .column { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 20px; min-height: 400px; }
+        .card { background: #fffcf0; color: #1e293b; padding: 15px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--dept-color); }
+        .btn-back { color: white; text-decoration: none; font-weight: 700; background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header-box">
+        <div class="head-info">
+            <p>ESTATE & MAINTENANCE OFFICE</p>
+            <h2>Head: Mr. Rajesh Patil (Estate Manager)</h2>
+            <span>Office: Building A, Ground Floor</span>
+        </div>
+        <a href="admindashboard.html" class="btn-back">← Back</a>
+    </div>
+    <div class="report-container">
+        <div class="column"><h3>🛠️ Repairs Pending</h3><div id="pendingList"></div></div>
+        <div class="column"><h3>🏢 Maintenance Completed</h3><div id="solvedList"></div></div>
+    </div>
+    <script>
+        function loadData() {
+            const list = JSON.parse(localStorage.getItem('grievances')) || [];
+            const deptIssues = list.filter(i => i.category === 'College Infrastructure');
+            const pending = document.getElementById('pendingList');
+            const solved = document.getElementById('solvedList');
+            deptIssues.forEach(item => {
+                const html = `<div class="card"><h4>${item.name}</h4><p>${item.text}</p><small>${item.date}</small></div>`;
+                item.status === 'Resolved' ? solved.innerHTML += html : pending.innerHTML += html;
+            });
+        }
+        loadData();
+    </script>
+</body>
+</html>
