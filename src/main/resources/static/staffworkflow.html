@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGMS Elite | Faculty Node</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+        --primary-orange: #ff8c00;
+        --bg-white: #ffffff;
+        --bg-soft: #f8fafc;
+        --text-dark: #0f172a;
+        --text-slate: #64748b;
+        --border: #e2e8f0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+        background-color: var(--bg-soft);
+        color: var(--text-dark);
+        display: flex;
+    }
+
+    /* --- SIDE NAVIGATION --- */
+    .faculty-sidebar {
+        width: 280px;
+        background: var(--bg-white);
+        border-right: 1px solid var(--border);
+        padding: 40px 24px;
+        height: 100vh;
+        position: fixed;
+    }
+
+    .dept-tag {
+        background: #fff7ed;
+        color: var(--primary-orange);
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    .nav-item {
+        padding: 14px 18px;
+        border-radius: 12px;
+        text-decoration: none;
+        color: var(--text-slate);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 5px;
+        transition: 0.2s;
+    }
+
+    .nav-item.active, .nav-item:hover {
+        background: var(--bg-soft);
+        color: var(--primary-orange);
+    }
+
+    /* --- CONTENT AREA --- */
+    .content {
+        margin-left: 280px;
+        flex: 1;
+        padding: 40px;
+    }
+
+    .header-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 40px;
+    }
+
+    /* --- WORKFLOW CARDS --- */
+    .workflow-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 25px;
+    }
+
+    .glass-card {
+        background: white;
+        border-radius: 24px;
+        padding: 30px;
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    .case-row {
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: 0.3s;
+    }
+
+    .case-row:hover {
+        border-color: var(--primary-orange);
+        background: #fffcf9;
+    }
+
+    .priority-badge {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+    }
+
+    .p-high { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+
+    .btn-action {
+        padding: 8px 16px;
+        background: var(--primary-orange);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+
+    /* --- ANALYTICS MINI --- */
+    .chart-container {
+        height: 200px;
+        margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="faculty-sidebar">
+  <div class="dept-tag">Computer Engineering</div>
+  <h2 style="font-weight: 800; margin-bottom: 40px;">SGMS <span>Faculty</span></h2>
+
+  <a href="#" class="nav-item active">📥 Assigned Inbox</a>
+  <a href="#" class="nav-item">✅ Resolved Cases</a>
+  <a href="#" class="nav-item">📅 Dept. Schedule</a>
+  <a href="index.html" class="nav-item" style="margin-top: auto; color: #ef4444;">Logout</a>
+</nav>
+
+<main class="content">
+  <div class="header-flex">
+    <div>
+      <h1 style="font-weight: 800; letter-spacing: -1px;">Departmental Workflow</h1>
+      <p style="color: var(--text-slate);">Manage and resolve student grievances for your sector.</p>
+    </div>
+    <div style="text-align: right;">
+      <div style="font-weight: 800; font-size: 1.2rem;">08</div>
+      <div style="font-size: 0.75rem; color: var(--text-slate); text-transform: uppercase;">Pending Action</div>
+    </div>
+  </div>
+
+  <div class="workflow-grid">
+    <div class="glass-card">
+      <h3 style="margin-bottom: 25px;">Active Grievance Stream</h3>
+
+      <div class="case-row">
+        <div>
+          <div style="font-size: 0.75rem; color: var(--text-slate); margin-bottom: 4px;">CASE #CE-882 — 2h ago</div>
+          <h4 style="font-weight: 700;">Lab Equipment Malfunction - B302</h4>
+          <p style="font-size: 0.85rem; color: var(--text-slate); margin-top: 5px;">Reported by Student ID: 57</p>
+        </div>
+        <div style="text-align: right;">
+                        <span style="font-size: 0.8rem; font-weight: 700; color: #ef4444; display: block; margin-bottom: 10px;">
+                            <span class="priority-badge p-high"></span>URGENT
+                        </span>
+          <button class="btn-action" onclick="alert('Opening Resolution Workflow...')">Take Action</button>
+        </div>
+      </div>
+
+      <div class="case-row">
+        <div>
+          <div style="font-size: 0.75rem; color: var(--text-slate); margin-bottom: 4px;">CASE #CE-885 — 5h ago</div>
+          <h4 style="font-weight: 700;">Software License Renewal Request</h4>
+          <p style="font-size: 0.85rem; color: var(--text-slate); margin-top: 5px;">Requesting IntelliJ Ultimate access for SE.</p>
+        </div>
+        <div style="text-align: right;">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-slate); display: block; margin-bottom: 10px;">NORMAL</span>
+          <button class="btn-action" style="background: #f1f5f9; color: var(--text-dark);">Review</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <h3 style="margin-bottom: 20px;">Dept. Health</h3>
+      <p style="font-size: 0.85rem; color: var(--text-slate);">Resolution efficiency this week.</p>
+      <div class="chart-container">
+        <canvas id="deptChart"></canvas>
+      </div>
+      <div style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px;">
+        <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-slate);">Quick Links</h4>
+        <a href="#" style="display: block; margin-top: 10px; color: var(--primary-orange); font-weight: 700; text-decoration: none; font-size: 0.9rem;">+ Escalation Protocol</a>
+        <a href="#" style="display: block; margin-top: 10px; color: var(--primary-orange); font-weight: 700; text-decoration: none; font-size: 0.9rem;">+ Contact HOD</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const ctx = document.getElementById('deptChart').getContext('2d');
+  new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+          labels: ['Resolved', 'Pending', 'Escalated'],
+          datasets: [{
+              data: [65, 25, 10],
+              backgroundColor: ['#ff8c00', '#f1f5f9', '#0f172a'],
+              borderWidth: 0
+          }]
+      },
+      options: {
+          plugins: {
+              legend: { position: 'bottom', labels: { boxWidth: 10, font: { family: 'Plus Jakarta Sans', weight: '700' } } }
+          },
+          cutout: '70%'
+      }
+  });
+</script>
+</body>
+</html>

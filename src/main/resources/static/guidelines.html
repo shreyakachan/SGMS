@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGMS Guidelines | SIES GST</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+        --purple-gradient: linear-gradient(135deg, #7209b7 0%, #3a0ca3 100%);
+        --sky-blue: #4cc9f0;
+        --glass-white: rgba(255, 255, 255, 0.9);
+        --text-main: #1e293b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+        background: #f0f2f5;
+        background-image:
+            radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%),
+            radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%),
+            radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .guidelines-card {
+        max-width: 850px;
+        background: var(--glass-white);
+        backdrop-filter: blur(15px);
+        border-radius: 35px;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .header {
+        background: var(--purple-gradient);
+        padding: 40px;
+        color: white;
+        text-align: center;
+    }
+
+    .header h1 { font-weight: 800; font-size: 2rem; letter-spacing: -1px; }
+
+    .content { padding: 40px; }
+
+    .step-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .step {
+        padding: 20px;
+        background: white;
+        border-radius: 20px;
+        border-left: 5px solid var(--sky-blue);
+        transition: 0.3s;
+    }
+
+    .step:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+    .step h4 { color: #3a0ca3; margin-bottom: 8px; font-weight: 700; }
+    .step p { font-size: 0.85rem; color: #64748b; line-height: 1.4; }
+
+    .warning-box {
+        background: #fff1f2;
+        border: 1px dashed #f43f5e;
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 20px;
+    }
+
+    .warning-box h4 { color: #be123c; font-size: 0.9rem; margin-bottom: 5px; }
+
+    .footer-action {
+        text-align: center;
+        padding: 20px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .btn-ack {
+        background: var(--purple-gradient);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="guidelines-card">
+  <div class="header">
+    <h1>Submission Guidelines</h1>
+    <p style="opacity: 0.8; font-size: 0.9rem; margin-top: 5px;">Ensuring a fair and transparent resolution process</p>
+  </div>
+
+  <div class="content">
+    <div class="step-container">
+      <div class="step">
+        <h4>01. Identity</h4>
+        <p>Submissions must be made via authorized SIES GST institutional emails only.</p>
+      </div>
+      <div class="step">
+        <h4>02. Evidence</h4>
+        <p>Attach supporting documents (PDF/JPG) for faster verification by the Faculty Node.</p>
+      </div>
+      <div class="step">
+        <h4>03. Language</h4>
+        <p>Maintain professional decorum. Use of abusive language will result in immediate dismissal.</p>
+      </div>
+    </div>
+
+    <div class="warning-box">
+      <h4>Legal Notice:</h4>
+      <p style="font-size: 0.8rem; color: #9f1239;">Filing false grievances with the intent to defame or harass staff/students is a punishable offense under the SIES Institutional Code of Conduct 2026.</p>
+    </div>
+  </div>
+
+  <div class="footer-action">
+    <a href="login.html" class="btn-ack">I Understand & Agree</a>
+  </div>
+</div>
+
+</body>
+</html>

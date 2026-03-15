@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGMS Elite | Institutional Portal</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+        background: #ffffff;
+        background: radial-gradient(circle at 50% 50%, #ffffff 0%, #f4f7ff 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+    }
+
+    /* --- NAVIGATION --- */
+    nav {
+        width: 90%;
+        max-width: 1300px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        margin-top: 20px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 40px;
+        position: sticky;
+        top: 20px;
+        z-index: 1000;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    }
+
+    .nav-logo {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -1px;
+        text-decoration: none;
+    }
+
+    .nav-logo span {
+        background: linear-gradient(135deg, #ff8c00, #f72585);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 35px;
+        list-style: none;
+    }
+
+    .nav-links li a {
+        text-decoration: none;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: 0.3s;
+    }
+
+    .nav-links li a:hover, .nav-links li a.active {
+        color: #ff8c00;
+    }
+
+    .nav-btn {
+        background: linear-gradient(135deg, #ff8c00, #f72585);
+        color: white;
+        padding: 10px 24px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-decoration: none;
+        transition: 0.3s;
+        box-shadow: 0 8px 15px rgba(255, 107, 0, 0.2);
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 20px rgba(255, 107, 0, 0.3);
+    }
+
+    /* --- CONTAINER --- */
+    .container {
+        width: 100%;
+        max-width: 1300px;
+        padding: 80px 30px;
+        z-index: 1;
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 80px;
+    }
+
+    header h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -3px;
+        line-height: 1;
+    }
+
+    header h1 span {
+        background: linear-gradient(135deg, #ff8c00, #f72585);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+        margin-top: 20px;
+        color: #64748b;
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+
+    /* --- PORTAL GRID --- */
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+    }
+
+    .card {
+        background: linear-gradient(135deg, #ff8c00 0%, #f72585 100%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 35px;
+        padding: 50px 30px;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        position: relative;
+        box-shadow: 0 15px 35px rgba(247, 37, 133, 0.15);
+        overflow: hidden;
+    }
+
+    .card::after {
+        content: '';
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        width: 8px;
+        height: 8px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #fff;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.3; }
+        100% { opacity: 1; }
+    }
+
+    .icon-square {
+        width: 70px;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(5px);
+        border-radius: 20px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .icon-inner {
+        width: 15px;
+        height: 15px;
+        background: #ffffff;
+        border-radius: 4px;
+        transition: all 0.6s;
+    }
+
+    .card h3 {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 15px;
+        transition: 0.4s;
+    }
+
+    .card p {
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.6;
+        transition: 0.4s;
+        font-weight: 500;
+    }
+
+    .card-label {
+        margin-top: 30px;
+        padding: 12px 28px;
+        background: #ffffff;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        transition: 0.3s;
+        display: inline-block;
+    }
+
+    .card-label span {
+        background: linear-gradient(135deg, #ff8c00, #f72585);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* --- HOVER STATES --- */
+    .card:hover {
+        background: #ffffff;
+        transform: translateY(-15px);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+        border-color: #ff8c00;
+    }
+
+    .card:hover .icon-square {
+        background: #ff8c00;
+        border-color: #ff8c00;
+        transform: rotate(45deg);
+    }
+
+    .card:hover .icon-inner {
+        background: #ffffff;
+        transform: rotate(-45deg);
+    }
+
+    .card:hover h3 { color: #0f172a; }
+    .card:hover p { color: #64748b; }
+
+    .card:hover .card-label {
+        background: linear-gradient(135deg, #ff8c00, #f72585);
+        transform: scale(1.05);
+    }
+
+    .card:hover .card-label span {
+        -webkit-text-fill-color: #ffffff;
+    }
+
+    footer {
+        margin-top: auto;
+        padding: 40px;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 0.75rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 1100px) {
+        .portal-grid { grid-template-columns: repeat(2, 1fr); }
+        header h1 { font-size: 3rem; }
+    }
+
+    @media (max-width: 650px) {
+        .portal-grid { grid-template-columns: 1fr; }
+        header h1 { font-size: 2.2rem; }
+        nav { padding: 0 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">SGMS <span>Elite</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="governance.html">Governance</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+    <li><a href="guidelines.html">Guidelines</a></li>
+  </ul>
+  <a href="support.html" class="nav-btn">Help Desk</a>
+</nav>
+
+<div class="container">
+  <header>
+    <h1>Institutional <span>Command</span></h1>
+    <p>Unified Grievance Management & Security Intelligence System</p>
+  </header>
+
+  <div class="portal-grid">
+    <a href="student-login.html" class="card">
+      <div class="icon-square"><div class="icon-inner"></div></div>
+      <h3>Student Hub</h3>
+      <p>Register complaints, SOS alerts, and track cases in real-time.</p>
+      <div class="card-label"><span>Enter Portal</span></div>
+    </a>
+
+    <a href="harrasment.html" class="card">
+      <div class="icon-square"><div class="icon-inner"></div></div>
+      <h3>Vigilance Unit</h3>
+      <p>Confidential module for stalking and harassment intervention.</p>
+      <div class="card-label"><span>Secure Login</span></div>
+    </a>
+
+    <a href="login.html" class="card">
+      <div class="icon-square"><div class="icon-inner"></div></div>
+      <h3>Staff Node</h3>
+      <p>Faculty response tools and departmental resolution workflows.</p>
+      <div class="card-label"><span>Faculty Access</span></div>
+    </a>
+
+    <a href="login.html" class="card">
+      <div class="icon-square"><div class="icon-inner"></div></div>
+      <h3>Super Admin</h3>
+      <p>System-wide analytics and executive oversight console.</p>
+      <div class="card-label"><span>Command Center</span></div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  Secured Framework &bull; SIES GST &bull; 2026
+</footer>
+
+</body>
+</html>

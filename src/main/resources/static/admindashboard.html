@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGMS Elite | Institutional Command</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+        --primary-orange: #ff8c00;
+        --deep-orange: #e67e00;
+        --accent-amber: #fff7ed;
+        --bg-white: #ffffff;
+        --bg-light: #fcfcfd;
+        --text-dark: #0f172a;
+        --text-slate: #64748b;
+        --border-light: #f1f5f9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+        background-color: var(--bg-light);
+        color: var(--text-dark);
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* --- CLEAN SIDEBAR --- */
+    .sidebar {
+        width: 280px;
+        background: var(--bg-white);
+        border-right: 2px solid var(--border-light);
+        padding: 40px 24px;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        height: 100vh;
+    }
+
+    .logo { font-size: 1.6rem; font-weight: 800; margin-bottom: 50px; text-decoration: none; color: var(--text-dark); letter-spacing: -1.5px; }
+    .logo span { color: var(--primary-orange); }
+
+    .nav-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #cbd5e1; margin-bottom: 20px; font-weight: 700; }
+
+    .nav-item {
+        padding: 14px 18px;
+        border-radius: 16px;
+        text-decoration: none;
+        color: var(--text-slate);
+        font-weight: 600;
+        margin-bottom: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .nav-item:hover, .nav-item.active {
+        background: var(--accent-amber);
+        color: var(--primary-orange);
+        transform: translateX(5px);
+    }
+
+    /* --- MAIN AREA --- */
+    .main-content {
+        margin-left: 280px;
+        flex: 1;
+        padding: 50px;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 45px;
+    }
+
+    .header-section h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
+
+    /* --- DASHBOARD GRID --- */
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+
+    .card {
+        background: var(--bg-white);
+        border-radius: 32px;
+        padding: 30px;
+        border: 1px solid var(--border-light);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+        transition: 0.3s;
+    }
+
+    .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(255, 140, 0, 0.08); }
+
+    .stat-card h4 { color: var(--text-slate); font-size: 0.85rem; font-weight: 700; margin-bottom: 15px; }
+    .stat-card .val { font-size: 2.8rem; font-weight: 800; color: var(--text-dark); line-height: 1; }
+    .stat-card .trend { font-size: 0.8rem; font-weight: 700; margin-top: 15px; display: inline-block; padding: 4px 12px; border-radius: 50px; }
+    .trend.up { background: #f0fdf4; color: #16a34a; }
+
+    .large-card { grid-column: span 2; }
+    .side-card { grid-column: span 1; }
+
+    /* --- TABLE STYLES --- */
+    table { width: 100%; border-collapse: separate; border-spacing: 0 12px; margin-top: 20px; }
+    th { text-align: left; padding: 15px; color: var(--text-slate); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; }
+    td { background: var(--bg-white); padding: 20px 15px; font-size: 0.95rem; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); }
+    td:first-child { border-left: 1px solid var(--border-light); border-radius: 16px 0 0 16px; font-weight: 700; }
+    td:last-child { border-right: 1px solid var(--border-light); border-radius: 0 16px 16px 0; }
+
+    .status { padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; }
+    .status-active { background: #fff7ed; color: #c2410c; }
+
+    /* --- BUTTONS --- */
+    .btn-orange {
+        background: var(--primary-orange);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(255, 140, 0, 0.2);
+        transition: 0.3s;
+    }
+    .btn-orange:hover { background: var(--deep-orange); transform: scale(1.03); }
+
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <a href="index.html" class="logo">SGMS <span>Elite</span></a>
+
+  <div class="nav-label">Main Console</div>
+  <a href="#" class="nav-item active">🏠 System Overview</a>
+  <a href="support.html" class="nav-item">🛡️ Vigilance Center</a>
+  <a href="#" class="nav-item">📊 Data Insights</a>
+
+  <div class="nav-label" style="margin-top: 30px;">Administration</div>
+  <a href="#" class="nav-item">👥 Faculty Access</a>
+  <a href="#" class="nav-item">⚙️ Settings</a>
+</div>
+
+<div class="main-content">
+  <div class="header-section">
+    <div>
+      <h1>Executive Command</h1>
+      <p style="color: var(--text-slate); margin-top: 5px;">Unified Security Monitoring Dashboard</p>
+    </div>
+    <button class="btn-orange">+ Create Incident Report</button>
+  </div>
+
+  <div class="grid-container">
+    <div class="card stat-card">
+      <h4>Total Active Cases</h4>
+      <div class="val">142</div>
+      <div class="trend up">↑ 4.2% Monthly</div>
+    </div>
+    <div class="card stat-card">
+      <h4>Resolution Rate</h4>
+      <div class="val">96.8%</div>
+      <div class="trend up" style="background: #eff6ff; color: #2563eb;">Optimal Efficiency</div>
+    </div>
+    <div class="card stat-card">
+      <h4>Response Time</h4>
+      <div class="val">18m</div>
+      <div class="trend up">Fastest in Region</div>
+    </div>
+
+    <div class="card large-card">
+      <h3 style="margin-bottom: 25px;">Grievance Activity Matrix</h3>
+      <canvas id="orangeChart" height="120"></canvas>
+    </div>
+
+    <div class="card side-card">
+      <h3 style="margin-bottom: 20px;">System Alerts</h3>
+      <div style="font-size: 0.85rem; color: var(--text-slate);">
+        <div style="border-bottom: 1px solid var(--border-light); padding-bottom: 15px; margin-bottom: 15px;">
+          <span style="color: var(--primary-orange); font-weight: 800;">[15:04]</span> Server backup sync successful.
+        </div>
+        <div style="border-bottom: 1px solid var(--border-light); padding-bottom: 15px; margin-bottom: 15px;">
+          <span style="color: var(--primary-orange); font-weight: 800;">[14:22]</span> New report filed: Hostel Block B.
+        </div>
+        <div>
+          <span style="color: var(--primary-orange); font-weight: 800;">[12:10]</span> Security firmware updated.
+        </div>
+      </div>
+    </div>
+
+    <div class="card large-card">
+      <h3 style="margin-bottom: 10px;">Monitor Active Streams</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Case ID</th>
+          <th>Category</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Vaishnavi M. Kedar</td>
+          <td>#ELT-2204</td>
+          <td>Academic Support</td>
+          <td><span class="status status-active">Processing</span></td>
+        </tr>
+        <tr>
+          <td>Student</td>
+          <td>#ELT-2205</td>
+          <td>Lab Inventory</td>
+          <td><span class="status status-active">Pending</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  const ctx = document.getElementById('orangeChart').getContext('2d');
+  new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+              label: 'Reports Received',
+              data: [10, 25, 18, 30, 22, 15, 28],
+              borderColor: '#ff8c00',
+              backgroundColor: 'rgba(255, 140, 0, 0.05)',
+              fill: true,
+              tension: 0.4,
+              borderWidth: 4,
+              pointRadius: 6,
+              pointBackgroundColor: '#fff',
+              pointBorderColor: '#ff8c00',
+              pointBorderWidth: 2
+          }]
+      },
+      options: {
+          plugins: { legend: { display: false } },
+          scales: {
+              x: { grid: { display: false } },
+              y: { grid: { color: '#f1f5f9' }, beginAtZero: true }
+          }
+      }
+  });
+</script>
+</body>
+</html>

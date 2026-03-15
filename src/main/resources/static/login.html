@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGMS Elite | Secure Gateway</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+        --primary-orange: #ff8c00;
+        --deep-orange: #e67e00;
+        --bg-light: #f8fafc;
+        --text-dark: #0f172a;
+        --text-slate: #64748b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+        background-color: var(--bg-light);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+        background-image: radial-gradient(#ff8c0010 1px, transparent 1px);
+        background-size: 30px 30px;
+    }
+
+    .login-container {
+        width: 900px;
+        background: #ffffff;
+        border-radius: 40px;
+        display: flex;
+        box-shadow: 0 40px 100px rgba(0,0,0,0.08);
+        overflow: hidden;
+        border: 1px solid #f1f5f9;
+    }
+
+    .login-visual {
+        flex: 1;
+        background: linear-gradient(135deg, #ff8c00 0%, #f72585 100%);
+        padding: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: white;
+        position: relative;
+    }
+
+    .login-visual h2 { font-size: 2.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+    .login-visual p { font-size: 1rem; opacity: 0.9; font-weight: 500; line-height: 1.6; }
+    .visual-footer { margin-top: auto; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; opacity: 0.6; }
+
+    .login-forms {
+        flex: 1.2;
+        padding: 60px;
+        background: white;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-toggle {
+        display: flex;
+        background: #f1f5f9;
+        padding: 6px;
+        border-radius: 16px;
+        margin-bottom: 40px;
+    }
+
+    .toggle-btn {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: 0.3s;
+        background: transparent;
+        color: var(--text-slate);
+    }
+
+    .toggle-btn.active {
+        background: white;
+        color: var(--primary-orange);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; font-size: 0.8rem; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .input-group input {
+        width: 100%;
+        padding: 16px 20px;
+        border-radius: 14px;
+        border: 2px solid #f1f5f9;
+        background: #f8fafc;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: 0.3s;
+        outline: none;
+    }
+
+    .input-group input:focus { border-color: var(--primary-orange); background: white; }
+
+    .btn-login {
+        width: 100%;
+        padding: 18px;
+        background: var(--primary-orange);
+        color: white;
+        border: none;
+        border-radius: 16px;
+        font-size: 1rem;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(255, 140, 0, 0.25);
+        transition: 0.3s;
+        margin-top: 10px;
+    }
+
+    .btn-login:hover { background: var(--deep-orange); transform: translateY(-2px); }
+
+    .form-section { display: none; }
+    .form-section.active { display: block; animation: fadeIn 0.5s ease; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="login-visual">
+    <div style="font-weight: 800; font-size: 1.2rem; margin-bottom: 40px;">SGMS <span>Elite</span></div>
+    <h2>Secure Institutional Access</h2>
+    <p>Authorized personnel only. Your access is monitored for institutional integrity and security.</p>
+    <div class="visual-footer">SIES GST • SECURE FRAMEWORK 2026</div>
+  </div>
+
+  <div class="login-forms">
+    <div class="form-toggle">
+      <button class="toggle-btn active" onclick="switchForm('staff')">Faculty Node</button>
+      <button class="toggle-btn" onclick="switchForm('admin')">Super Admin</button>
+    </div>
+
+    <div id="staff-form" class="form-section active">
+      <h3 style="margin-bottom: 10px; font-weight: 800;">Staff Login</h3>
+      <p style="color: var(--text-slate); font-size: 0.9rem; margin-bottom: 30px;">Enter your departmental credentials.</p>
+
+      <form onsubmit="handleLogin(event, 'staffworkflow.html')">
+        <div class="input-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="faculty@siesgst.ac.in" required>
+        </div>
+        <div class="input-group">
+          <label>Staff ID</label>
+          <input type="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-login">Enter Faculty Node</button>
+      </form>
+    </div>
+
+    <div id="admin-form" class="form-section">
+      <h3 style="margin-bottom: 10px; font-weight: 800;">Command Center</h3>
+      <p style="color: var(--text-slate); font-size: 0.9rem; margin-bottom: 30px;">Elevated credentials required.</p>
+
+      <form onsubmit="handleLogin(event, 'admindashboard.html')">
+        <div class="input-group">
+          <label>Admin ID</label>
+          <input type="text" placeholder="Executive ID" required>
+        </div>
+        <div class="input-group">
+          <label>Secret Key</label>
+          <input type="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-login" style="background: var(--text-dark);">Authenticate Admin</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function switchForm(type) {
+      document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+      if (type === 'staff') {
+          document.querySelector('.toggle-btn:nth-child(1)').classList.add('active');
+      } else {
+          document.querySelector('.toggle-btn:nth-child(2)').classList.add('active');
+      }
+      document.querySelectorAll('.form-section').forEach(form => form.classList.remove('active'));
+      document.getElementById(type + '-form').classList.add('active');
+  }
+
+  function handleLogin(e, destination) {
+      e.preventDefault();
+      window.location.href = destination;
+  }
+</script>
+
+</body>
+</html>

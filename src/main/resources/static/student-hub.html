@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGMS Elite | Student Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: #fff5f0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* --- Sophisticated Navigation --- */
+        nav {
+            position: fixed;
+            top: 25px;
+            width: 90%;
+            max-width: 1100px;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            padding: 12px 35px;
+            border-radius: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 15px 35px rgba(247, 37, 133, 0.05);
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #4a041a;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav-logo span {
+            background: linear-gradient(135deg, #f72585, #ffb703);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #8a6a76;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #f72585;
+            transform: translateY(-2px);
+        }
+
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #4a041a;
+            padding: 6px 18px 6px 6px;
+            border-radius: 100px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .profile-trigger:hover {
+            background: #f72585;
+            box-shadow: 0 10px 20px rgba(247, 37, 133, 0.2);
+        }
+
+        .avatar-circle {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #f72585, #ffb703);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        /* --- Main Hub Content --- */
+        .hub-content {
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .welcome-text {
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .welcome-text h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #4a041a;
+            letter-spacing: -2px;
+        }
+
+        .welcome-text p {
+            color: #8a6a76;
+            font-weight: 600;
+            margin-top: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 40px;
+            perspective: 1500px;
+        }
+
+        .elite-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            padding: 70px 45px;
+            border-radius: 60px;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 25px 50px rgba(247, 37, 133, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .elite-card:hover {
+            transform: translateY(-20px) rotateX(4deg);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 50px 100px rgba(247, 37, 133, 0.15);
+            border-color: #f72585;
+        }
+
+        .card-icon {
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border-radius: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            margin-bottom: 35px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.04);
+            transition: 0.5s;
+        }
+
+        .elite-card:hover .card-icon {
+            transform: scale(1.15) rotate(-5deg);
+            box-shadow: 0 20px 40px rgba(247, 37, 133, 0.1);
+        }
+
+        .elite-card h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #4a041a;
+            margin-bottom: 15px;
+        }
+
+        .elite-card p {
+            font-size: 1rem;
+            color: #8a6a76;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .action-tag {
+            margin-top: 40px;
+            padding: 15px 40px;
+            background: #fff0f6;
+            border-radius: 100px;
+            color: #f72585;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+            border: 1px solid #ffdeeb;
+        }
+
+        .elite-card:hover .action-tag {
+            background: linear-gradient(135deg, #f72585, #ffb703);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 10px 20px rgba(247, 37, 133, 0.3);
+        }
+
+        /* Sparkle Script Style */
+        .magic-sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: sparkleAnim 0.8s linear forwards;
+        }
+
+        @keyframes sparkleAnim {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0) translateY(30px); opacity: 0; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="student-hub.html" class="nav-logo">SGMS <span>Elite</span></a>
+    <ul class="nav-links">
+        <li><a href="student-hub.html">Home</a></li>
+        <li><a href="analytics.html">History</a></li>
+        <li><a href="support.html">Support</a></li>
+    </ul>
+    <a href="profile.html" class="profile-trigger">
+        <div class="avatar-circle">V</div>
+        Vaishnavi
+    </a>
+</nav>
+
+<div class="hub-content">
+    <div class="welcome-text">
+        <p>Welcome Back</p>
+        <h1>The <span>Elite</span> Experience</h1>
+    </div>
+
+    <div class="options-container">
+        <a href="file-complaint.html" class="elite-card">
+            <div class="card-icon">💌</div>
+            <h2>File Complaint</h2>
+            <p>Submit your grievances to department heads with total privacy and instant tracking.</p>
+            <div class="action-tag">File Now</div>
+        </a>
+
+        <a href="analytics.html" class="elite-card">
+            <div class="card-icon">✨</div>
+            <h2>View Analytics</h2>
+            <p>Track your resolution progress and view campus-wide efficiency statistics.</p>
+            <div class="action-tag">Check Status</div>
+        </a>
+    </div>
+</div>
+
+<script>
+    // Sparkle Trail Effect
+    document.addEventListener('mousemove', function(e) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'magic-sparkle';
+        sparkle.style.left = e.pageX + 'px';
+        sparkle.style.top = e.pageY + 'px';
+
+        const colors = ['#f72585', '#ffb703', '#ffffff', '#ffdeeb'];
+        sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 800);
+    });
+</script>
+
+</body>
+</html>

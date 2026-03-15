@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeGuard | SGMS Red Alert Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --emergency-red: #7f1d1d;
+            --bright-red: #ef4444;
+            --deep-burgundy: #450a0a;
+            --glass-red: rgba(127, 29, 29, 0.4);
+            --dark-surface: #1a0505;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            /* High-Intensity Red Gradient Background */
+            background: radial-gradient(circle at center, #991b1b 0%, #450a0a 100%);
+            background-attachment: fixed;
+            color: #fee2e2;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- RED ALERT HEADER --- */
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--bright-red);
+            backdrop-filter: blur(25px);
+            padding: 25px 40px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 0 40px rgba(153, 27, 27, 0.6);
+        }
+
+        .live-status {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 13px; font-weight: 900; color: #fff;
+            text-transform: uppercase;
+        }
+
+        .pulse-core {
+            width: 12px; height: 12px; background: #fff;
+            border-radius: 50%; animation: emergency-pulse 1.2s infinite;
+        }
+
+        @keyframes emergency-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.9); }
+            70% { transform: scale(1.3); box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+
+        /* --- CASE CARDS --- */
+        .case-card {
+            background: #ffffff;
+            color: #1a0505;
+            padding: 35px;
+            border-radius: 35px;
+            margin-bottom: 30px;
+            border-left: 15px solid var(--emergency-red);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .risk-banner {
+            position: absolute; top: 0; right: 40px;
+            padding: 10px 30px; background: var(--bright-red);
+            color: white; font-weight: 900; font-size: 12px;
+            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        /* --- INTEL GRID --- */
+        .intel-grid {
+            display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-top: 30px;
+        }
+
+        .intel-box {
+            background: #fff5f5; padding: 20px; border-radius: 20px;
+            border: 1px solid #fee2e2;
+        }
+
+        .incident-details {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 15px; margin: 20px 0;
+        }
+
+        .detail-item {
+            background: #fff; padding: 15px; border-radius: 15px;
+            border: 1px solid #fecaca; font-size: 13px;
+        }
+
+        .detail-item strong { color: var(--emergency-red); display: block; margin-bottom: 5px; font-size: 11px; }
+
+        /* --- ACTION BUTTONS --- */
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 30px; }
+
+        .btn-action {
+            padding: 14px 24px; border-radius: 15px; border: none;
+            font-weight: 800; cursor: pointer; font-size: 12px;
+            transition: 0.3s;
+        }
+
+        .btn-dispatch { background: #000; color: #fff; border: 2px solid var(--bright-red); }
+        .btn-lock { background: #1e3a8a; color: white; }
+        .btn-resolve { background: #065f46; color: white; }
+
+        .btn-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div>
+        <div class="live-status"><div class="pulse-core"></div> HIGH-ALERT MODE ACTIVE</div>
+        <h1 style="margin:5px 0 0; letter-spacing: -1px;">Vigilance Command Console</h1>
+    </div>
+    <div style="display: flex; gap: 15px;">
+        <button onclick="window.location.reload()" style="background:rgba(255,255,255,0.1); border:1px solid #fff; color:white; padding:10px 20px; border-radius:15px; cursor:pointer; font-weight:700;">Refresh Grid</button>
+        <a href="admindashboard.html" style="background: #fff; color: #7f1d1d; padding: 10px 25px; border-radius: 15px; font-weight: 800; text-decoration: none;">Exit Center</a>
+    </div>
+</div>
+
+<div id="grievanceDisplay">
+</div>
+
+<script>
+    function loadSafetyPortal() {
+        // Fetch cases from storage (or use mock for preview)
+        const mockData = [
+            {
+                name: "Priority Subject 01",
+                prn: "124A1057",
+                date: "March 15, 2026",
+                status: "CRITICAL",
+                category: "URGENT_SAFETY",
+                text: "Unidentified individual repeatedly loitering near the SIES GST Library exit during late hours. Possible stalking pattern detected."
+            }
+        ];
+
+        const list = JSON.parse(localStorage.getItem('grievances')) || mockData;
+        const container = document.getElementById('grievanceDisplay');
+        const urgentCases = list.filter(i => i.category.includes('URGENT'));
+
+        if(urgentCases.length === 0) {
+            container.innerHTML = "<div style='text-align:center; padding:100px; color:white;'><h3>Scanning... All Sectors Clear.</h3></div>";
+            return;
+        }
+
+        container.innerHTML = urgentCases.map((item, index) => {
+            return `
+                <div class="case-card">
+                    <div class="risk-banner">AI THREAT LEVEL: 92%</div>
+
+                    <div style="display:flex; justify-content:space-between;">
+                        <div>
+                            <span style="background:#000; color:#fff; padding:5px 12px; border-radius:20px; font-size:10px; font-weight:800;">INCIDENT LOG: ${index + 1}</span>
+                            <h2 style="margin:15px 0 5px 0; font-size:24px;">Case: ${item.name}</h2>
+                            <p style="margin:0; opacity:0.6; font-size:14px;">Reference ID: ${item.prn} | Captured: ${item.date}</p>
+                        </div>
+                        <div style="text-align:right">
+                            <span style="font-weight:900; color:var(--bright-red); font-size:14px;">STATUS: ${item.status}</span>
+                        </div>
+                    </div>
+
+                    <div style="margin: 25px 0; background: #fff5f5; padding: 25px; border-radius: 20px; border-left: 8px solid var(--bright-red);">
+                        <strong style="display:block; margin-bottom:10px; font-size:12px; color:var(--emergency-red);">NARRATIVE STATEMENT:</strong>
+                        <p style="font-size: 18px; font-style: italic; color: #450a0a; line-height:1.6; margin:0;">"${item.text}"</p>
+                    </div>
+
+                    <div class="incident-details">
+                        <div class="detail-item"><strong>📍 GEOLOCATION</strong>Library Corridor / SE Wing</div>
+                        <div class="detail-item"><strong>🕒 FREQUENCY</strong>3 Events in 7 Days</div>
+                        <div class="detail-item"><strong>👥 WITNESS LOG</strong>CCTV Entry #4459</div>
+                        <div class="detail-item"><strong>⚖️ REGULATORY</strong>POSH Act Compliance Required</div>
+                    </div>
+
+                    <div class="intel-grid">
+                        <div class="intel-box">
+                            <strong style="font-size:11px; color:#991b1b; text-transform:uppercase;">Surveillance Evidence</strong>
+                            <div style="display:flex; gap:12px; margin-top:15px;">
+                                <div style="background:#fff; padding:15px; border-radius:12px; font-size:11px; text-align:center; border:1px solid #fecaca; flex:1;">📄 EVIDENCE_01.PDF</div>
+                                <div style="background:#fff; padding:15px; border-radius:12px; font-size:11px; text-align:center; border:1px solid #fecaca; flex:1;">🖼️ SCAN_77.PNG</div>
+                            </div>
+                        </div>
+                        <div class="intel-box" style="background:#000; color:#fff;">
+                            <strong style="font-size:11px; color:var(--bright-red); text-transform:uppercase;">Protocol Timeline</strong>
+                            <ul style="padding-left:15px; font-size:11px; margin-top:10px; line-height:1.8;">
+                                <li>System flagged loitering pattern</li>
+                                <li>Case escalated to Admin Hub</li>
+                                <li style="color:var(--bright-red); font-weight:bold;">Awaiting Intervention...</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn-action btn-dispatch" onclick="alert('SECURITY DISPATCHED TO SE WING.')">⚡ DISPATCH SECURITY</button>
+                        <button class="btn-action btn-lock" onclick="alert('CCTV DATA ENCRYPTED.')">📹 LOCK CCTV DATA</button>
+                        <button class="btn-action btn-resolve" onclick="resolveCase(${index})">✅ RESOLVE & CLOSE</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function resolveCase(idx) {
+        let list = JSON.parse(localStorage.getItem('grievances')) || [];
+        if(list[idx]) {
+            list[idx].status = 'Resolved';
+            localStorage.setItem('grievances', JSON.stringify(list));
+            loadSafetyPortal();
+        }
+    }
+
+    loadSafetyPortal();
+</script>
+
+</body>
+</html>

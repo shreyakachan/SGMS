@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGMS Elite | Student Access</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
+                        url('img1.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .shape {
+            position: absolute;
+            filter: blur(100px);
+            z-index: 0;
+            opacity: 0.45;
+            animation: float 15s infinite alternate;
+        }
+
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            background: #ff8c00;
+            top: -50px;
+            left: -50px;
+        }
+
+        .shape-2 {
+            width: 450px;
+            height: 450px;
+            background: #f72585;
+            bottom: -50px;
+            right: -50px;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
+        }
+
+        .login-card {
+            width: 420px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(25px);
+            border-radius: 40px;
+            padding: 50px;
+            text-align: center;
+            z-index: 10;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            animation: slideUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 5px;
+            letter-spacing: -2px;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, #ff8c00, #f72585);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sub-text {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-bottom: 40px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 18px 25px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            color: #1e293b;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            background: #ffffff;
+            border-color: #ff8c00;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: #ffffff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            text-decoration: none;
+            display: block;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .login-btn span {
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: linear-gradient(135deg, #ff8c00, #f72585);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, #ff8c00, #f72585);
+            box-shadow: 0 20px 40px rgba(255, 107, 0, 0.3);
+        }
+
+        .login-btn:hover span {
+            -webkit-text-fill-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .footer-links {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #f72585;
+        }
+    </style>
+</head>
+<body>
+
+<div class="shape shape-1"></div>
+<div class="shape shape-2"></div>
+
+<div class="login-card">
+    <div class="logo">SGMS <span>Elite</span></div>
+    <div class="sub-text">Student Access Terminal</div>
+
+    <form>
+        <div class="input-group">
+            <input type="text" placeholder="Roll Number / ID" required>
+        </div>
+        <div class="input-group">
+            <input type="password" placeholder="Passcode" required>
+        </div>
+
+        <a href="student-hub.html" class="login-btn">
+            <span>Unlock Portal</span>
+        </a>
+    </form>
+
+    <div class="footer-links">
+        <a href="#">Forgot Passcode?</a>
+        <a href="#support.html">Support Center</a>
+    </div>
+</div>
+
+</body>
+</html>
