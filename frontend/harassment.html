@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigilance Unit | Student Grievance Portal</title>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #1c1e21;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            background: #ffffff;
+            max-width: 550px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        header {
+            border-bottom: 3px solid #d93025; /* Red accent for vigilance/urgency */
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            color: #d93025;
+            margin: 0;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p.subtitle {
+            color: #5f6368;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        select, textarea, input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        textarea { resize: vertical; min-height: 100px; }
+
+        .radio-group {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            background-color: #1a73e8;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover { background-color: #1765cc; }
+
+        .hidden { display: none; }
+
+        .success-card {
+            background: #e6f4ea;
+            color: #137333;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #ceead6;
+        }
+
+        .id-badge {
+            display: inline-block;
+            background: #fff;
+            padding: 5px 15px;
+            border: 2px dashed #137333;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Vigilance Unit</h1>
+            <p class="subtitle">Confidential Reporting for Ethics & Misconduct</p>
+        </header>
+
+        <form id="vigilanceForm">
+            <div class="form-group">
+                <label for="incidentType">Nature of Incident</label>
+                <select id="incidentType" required>
+                    <option value="">-- Select Category --</option>
+                    <option value="harassment">Harassment / Bullying</option>
+                    <option value="corruption">Bribery / Financial Malpractice</option>
+                    <option value="exam">Examination Malpractice</option>
+                    <option value="admin">Administrative Negligence</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Detailed Evidence/Description</label>
+                <textarea id="description" placeholder="Include names, dates, and specific details..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Identify Yourself?</label>
+                <div class="radio-group">
+                    <label style="font-weight: normal;">
+                        <input type="radio" name="anon" value="true" checked> Anonymous
+                    </label>
+                    <label style="font-weight: normal;">
+                        <input type="radio" name="anon" value="false"> Disclose Identity
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group hidden" id="contactSection">
+                <label for="email">Institutional Email</label>
+                <input type="email" id="email" placeholder="student@university.edu">
+            </div>
+
+            <button type="submit" class="submit-btn">File Formal Report</button>
+        </form>
+
+        <div id="result" class="hidden">
+            <div class="success-card">
+                <h3>Submission Received</h3>
+                <p>Your report has been encrypted and sent to the Vigilance Officer.</p>
+                <div class="id-badge" id="trackingId"></div>
+                <p style="font-size: 12px;">Save this ID to follow up on your case.</p>
+                <button onclick="window.location.reload()" style="margin-top:10px; cursor:pointer;">File Another Report</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('vigilanceForm');
+        const anonRadios = document.getElementsByName('anon');
+        const contactSection = document.getElementById('contactSection');
+        const resultDiv = document.getElementById('result');
+        const trackingIdDisplay = document.getElementById('trackingId');
+
+        // Toggle contact email field based on anonymity choice
+        anonRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'false') {
+                    contactSection.classList.remove('hidden');
+                } else {
+                    contactSection.classList.add('hidden');
+                }
+            });
+        });
+
+        // Form Submission logic
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Create a unique Tracking ID (Simulated)
+            const timestamp = Date.now().toString().slice(-4);
+            const randomStr = Math.random().toString(36).substr(2, 5).toUpperCase();
+            const finalId = `VIG-${timestamp}-${randomStr}`;
+
+            // Hide form and show success UI
+            form.classList.add('hidden');
+            resultDiv.classList.remove('hidden');
+            trackingIdDisplay.innerText = finalId;
+
+            // Log data (In a real app, send this to a server via fetch/AJAX)
+            console.log("Report Logged:", {
+                type: document.getElementById('incidentType').value,
+                description: document.getElementById('description').value,
+                trackingId: finalId,
+                timestamp: new Date().toISOString()
+            });
+        });
+    </script>
+</body>
+</html>

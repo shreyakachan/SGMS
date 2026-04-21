@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guidelines | SGMS Elite</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
+body{background:radial-gradient(circle,#ffffff,#f4f7ff);}
+
+nav{
+width:90%;max-width:1280px;height:76px;margin:20px auto;border-radius:22px;
+background:rgba(255,255,255,0.8);backdrop-filter:blur(15px);
+display:flex;align-items:center;padding:0 36px;
+}
+
+.nav-logo{font-size:1.5rem;font-weight:800;}
+.nav-logo span{
+background:linear-gradient(135deg,#ff8c00,#f72585);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.container{max-width:900px;margin:60px auto;}
+
+.header{text-align:center;margin-bottom:40px;}
+.header h1{font-size:3rem;font-weight:800;}
+.header span{
+background:linear-gradient(135deg,#ff8c00,#f72585);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.list{
+background:white;
+border-radius:26px;
+padding:30px;
+box-shadow:0 12px 30px rgba(0,0,0,0.05);
+}
+
+.item{
+padding:15px;
+border-bottom:1px solid #eee;
+display:flex;
+gap:10px;
+}
+
+.item:last-child{border:none;}
+
+.tick{
+width:24px;height:24px;
+background:linear-gradient(135deg,#ff8c00,#f72585);
+border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+color:white;font-size:14px;
+}
+
+.item p{font-size:0.9rem;color:#64748b;}
+.back-btn {
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-right: 15px;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  color: #ff8c00;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a href="index.html" class="back-btn">← Back</a>
+  <div class="nav-logo">SGMS <span>Elite</span></div>
+</nav>
+
+<div class="container">
+  <div class="header">
+    <h1>Usage <span>Guidelines</span></h1>
+  </div>
+
+  <div class="list">
+    <div class="item"><div class="tick">✓</div><p>Provide accurate complaint details.</p></div>
+    <div class="item"><div class="tick">✓</div><p>Avoid duplicate submissions.</p></div>
+    <div class="item"><div class="tick">✓</div><p>Use respectful language.</p></div>
+    <div class="item"><div class="tick">✓</div><p>Track status regularly.</p></div>
+    <div class="item"><div class="tick">✓</div><p>Report misuse immediately.</p></div>
+  </div>
+</div>
+
+</body>
+</html>

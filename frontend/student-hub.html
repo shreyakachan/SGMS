@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGMS Elite | Student Hub</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background: #fff5f0; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; padding: 110px 20px 40px; }
+
+    nav {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      width: 90%; max-width: 1060px;
+      background: rgba(255,255,255,0.82); backdrop-filter: blur(20px);
+      padding: 12px 30px; border-radius: 28px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 1000; border: 1px solid rgba(255,255,255,0.85);
+      box-shadow: 0 10px 30px rgba(247,37,133,0.06);
+    }
+    .nav-logo { font-size: 1.4rem; font-weight: 800; color: #4a041a; text-decoration: none; letter-spacing: -1px; }
+    .nav-logo span { background: linear-gradient(135deg,#f72585,#ffb703); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { text-decoration: none; color: #8a6a76; font-size: 0.88rem; font-weight: 700; transition: 0.3s; }
+    .nav-links a:hover { color: #f72585; }
+    .profile-trigger { display: flex; align-items: center; gap: 10px; background: #4a041a; padding: 6px 16px 6px 6px; border-radius: 100px; color: white; font-size: 0.82rem; font-weight: 700; text-decoration: none; transition: 0.3s; }
+    .profile-trigger:hover { background: #f72585; }
+    .avatar-circle { width: 32px; height: 32px; background: linear-gradient(135deg,#f72585,#ffb703); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 0.88rem; }
+
+    .hub-content { width: 100%; max-width: 940px; text-align: center; }
+    .welcome-text { margin-bottom: 52px; animation: fadeInDown 0.7s ease-out; }
+    .welcome-text p { color: #8a6a76; font-weight: 700; text-transform: uppercase; font-size: 0.73rem; letter-spacing: 2px; margin-bottom: 8px; }
+    .welcome-text h1 { font-size: 2.7rem; font-weight: 800; color: #4a041a; letter-spacing: -2px; }
+    .welcome-text h1 span { background: linear-gradient(135deg,#f72585,#ffb703); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    @keyframes fadeInDown { from { opacity:0; transform:translateY(-22px); } to { opacity:1; transform:translateY(0); } }
+
+    .options-container { display: grid; grid-template-columns: repeat(auto-fit,minmax(330px,1fr)); gap: 34px; perspective: 1400px; }
+
+    .elite-card { background: rgba(255,255,255,0.76); backdrop-filter: blur(18px); padding: 58px 38px; border-radius: 52px; text-decoration: none; position: relative; transition: all 0.5s cubic-bezier(0.23,1,0.32,1); border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 18px 42px rgba(247,37,133,0.07); display: flex; flex-direction: column; align-items: center; }
+    .elite-card:hover { transform: translateY(-16px) rotateX(3deg); background: rgba(255,255,255,0.97); box-shadow: 0 40px 85px rgba(247,37,133,0.13); border-color: #f72585; }
+    .card-icon { width: 88px; height: 88px; background: #fff; border-radius: 30px; display: flex; justify-content: center; align-items: center; font-size: 2.7rem; margin-bottom: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.04); transition: 0.45s; }
+    .elite-card:hover .card-icon { transform: scale(1.1) rotate(-5deg); }
+    .elite-card h2 { font-size: 1.65rem; font-weight: 800; color: #4a041a; margin-bottom: 12px; }
+    .elite-card p  { font-size: 0.94rem; color: #8a6a76; line-height: 1.6; font-weight: 500; }
+    .action-tag { margin-top: 34px; padding: 12px 34px; background: #fff0f6; border-radius: 100px; color: #f72585; font-weight: 800; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; border: 1px solid #ffdeeb; }
+    .elite-card:hover .action-tag { background: linear-gradient(135deg,#f72585,#ffb703); color: white; border-color: transparent; }
+
+    .logout-btn { margin-top: 50px; background: none; border: none; color: #8a6a76; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: 0.3s; }
+    .logout-btn:hover { color: #f72585; }
+
+    .magic-sparkle { position: fixed; width: 6px; height: 6px; border-radius: 50%; pointer-events: none; z-index: 9999; animation: sparkleAnim 0.8s linear forwards; }
+    @keyframes sparkleAnim { 0% { transform:scale(1); opacity:1; } 100% { transform:scale(0) translateY(26px); opacity:0; } }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="student-hub.html" class="nav-logo">SGMS <span>Elite</span></a>
+  <ul class="nav-links">
+    <li><a href="student-hub.html">Home</a></li>
+    <li><a href="analytics.html">History</a></li>
+    <li><a href="support.html">Support</a></li>
+  </ul>
+  <a href="profile.html" class="profile-trigger">
+    <div class="avatar-circle" id="avatarLetter">S</div>
+    <span id="navName">Student</span>
+  </a>
+</nav>
+
+<div class="hub-content">
+  <div class="welcome-text">
+    <p id="welcomeLabel">Welcome Back</p>
+    <h1>The <span>Elite</span> Experience</h1>
+  </div>
+  <div class="options-container">
+    <a href="file-complaint.html" class="elite-card">
+      <div class="card-icon">💌</div>
+      <h2>File Complaint</h2>
+      <p>Submit your grievances to department heads with total privacy and instant tracking.</p>
+      <div class="action-tag">File Now</div>
+    </a>
+    <a href="analytics.html" class="elite-card">
+      <div class="card-icon">✨</div>
+      <h2>View Analytics</h2>
+      <p>Track your resolution progress and view campus-wide efficiency statistics.</p>
+      <div class="action-tag">Check Status</div>
+    </a>
+  </div>
+  <button class="logout-btn" onclick="logout()">← Logout &amp; Return to Home</button>
+</div>
+
+<script>
+  const token   = sessionStorage.getItem('studentToken');
+  const student = JSON.parse(sessionStorage.getItem('studentData') || '{}');
+  if (!token) { window.location.href = 'student-login.html'; }
+
+  if (student.name) {
+    const first = student.name.split(' ')[0];
+    document.getElementById('navName').textContent        = first;
+    document.getElementById('avatarLetter').textContent   = student.name.charAt(0).toUpperCase();
+    document.getElementById('welcomeLabel').textContent   = 'Welcome Back, ' + first + ' 👋';
+  }
+
+  function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+
+  document.addEventListener('mousemove', e => {
+    const s = document.createElement('div');
+    s.className    = 'magic-sparkle';
+    s.style.left   = e.clientX + 'px';
+    s.style.top    = e.clientY + 'px';
+    s.style.background = ['#f72585','#ffb703','#fff','#ffdeeb'][Math.floor(Math.random()*4)];
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 800);
+  });
+</script>
+</body>
+</html>

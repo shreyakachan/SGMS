@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help Desk | SGMS Elite</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
+body{background:radial-gradient(circle,#ffffff,#f4f7ff);}
+
+nav{
+width:90%;max-width:1280px;height:76px;margin:20px auto;border-radius:22px;
+background:rgba(255,255,255,0.8);backdrop-filter:blur(15px);
+display:flex;align-items:center;padding:0 36px;
+}
+
+.nav-logo{font-size:1.5rem;font-weight:800;}
+.nav-logo span{
+background:linear-gradient(135deg,#ff8c00,#f72585);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.container{
+max-width:600px;
+margin:60px auto;
+background:white;
+padding:30px;
+border-radius:26px;
+box-shadow:0 12px 30px rgba(0,0,0,0.05);
+}
+
+h1{text-align:center;font-weight:800;margin-bottom:20px;}
+
+input, textarea{
+width:100%;
+padding:14px;
+margin-bottom:12px;
+border-radius:12px;
+border:2px solid #f1f5f9;
+background:#f8fafc;
+outline:none;
+}
+
+input:focus, textarea:focus{
+border-color:#ff8c00;
+background:white;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,#ff8c00,#f72585);
+color:white;
+font-weight:700;
+cursor:pointer;
+}
+
+button:hover{opacity:0.9;}
+.back-btn {
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-right: 15px;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  color: #ff8c00;
+}
+
+.error {
+  font-size: 0.75rem;
+  color: #ef4444;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.input-error {
+  border-color: #ef4444 !important;
+  background: #fff1f2 !important;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a href="index.html" class="back-btn">← Back</a>
+  <div class="nav-logo">SGMS <span>Elite</span></div>
+</nav>
+
+<div class="container">
+  <h1>Help Desk</h1>
+
+ <input type="text" id="name" placeholder="Your Name">
+<div class="error" id="nameError"></div>
+
+<input type="email" id="email" placeholder="Your Email (@siesgst.ac.in)">
+<div class="error" id="emailError"></div>
+
+<textarea id="message" rows="4" placeholder="Describe your issue..."></textarea>
+<div class="error" id="messageError"></div>
+
+<button id="submitBtn">Submit Request</button>
+
+  
+  
+</div>
+
+<script>
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const messageInput = document.getElementById("message");
+
+const nameError = document.getElementById("nameError");
+const emailError = document.getElementById("emailError");
+const messageError = document.getElementById("messageError");
+
+const emailPattern = /^[a-zA-Z0-9._%+-]+@siesgst\.ac\.in$/;
+
+// 🔹 Live validation while typing
+
+nameInput.addEventListener("input", () => {
+  if (!nameInput.value.trim()) {
+    nameError.textContent = "Name is required";
+    nameInput.classList.add("input-error");
+  } else {
+    nameError.textContent = "";
+    nameInput.classList.remove("input-error");
+  }
+});
+
+emailInput.addEventListener("input", () => {
+  if (!emailInput.value.trim()) {
+    emailError.textContent = "Email is required";
+    emailInput.classList.add("input-error");
+  } else if (!emailPattern.test(emailInput.value)) {
+    emailError.textContent = "Use only @siesgst.ac.in email";
+    emailInput.classList.add("input-error");
+  } else {
+    emailError.textContent = "";
+    emailInput.classList.remove("input-error");
+  }
+});
+
+messageInput.addEventListener("input", () => {
+  if (!messageInput.value.trim()) {
+    messageError.textContent = "Message is required";
+    messageInput.classList.add("input-error");
+  } else {
+    messageError.textContent = "";
+    messageInput.classList.remove("input-error");
+  }
+});
+
+// 🔹 On submit
+
+document.getElementById("submitBtn").addEventListener("click", () => {
+  if (
+    !nameInput.value.trim() ||
+    !emailPattern.test(emailInput.value) ||
+    !messageInput.value.trim()
+  ) {
+    // show errors if user directly clicks submit
+    nameInput.dispatchEvent(new Event("input"));
+    emailInput.dispatchEvent(new Event("input"));
+    messageInput.dispatchEvent(new Event("input"));
+    return;
+  }
+
+  // ✅ Success
+  alert("✅ Request submitted successfully!");
+
+  nameInput.value = "";
+  emailInput.value = "";
+  messageInput.value = "";
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elite | File Complaint</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background: #fff5f0;
+      min-height: 100vh;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .form-card {
+      width: 100%;
+      max-width: 700px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 50px;
+      border-radius: 40px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
+    h2 { color: #4a041a; font-size: 1.9rem; }
+
+    .back-link { text-decoration: none; color: #f72585; font-weight: 700; font-size: 0.85rem; }
+
+    .input-box { margin-bottom: 20px; }
+
+    label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #4a041a; }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 15px;
+      border: 2px solid #ffe4d8;
+      font-size: 0.95rem;
+      outline: none;
+      transition: 0.3s;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #fff9f7;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #f72585;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(247, 37, 133, 0.07);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #f72585, #ffb703);
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      letter-spacing: 0.5px;
+    }
+
+    .submit-btn:hover    { opacity: 0.9; transform: translateY(-3px); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .alert.error   { background: #fff1f2; color: #be123c; border: 1px solid #fecaca; display: block; }
+    .alert.success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; display: block; }
+  </style>
+</head>
+
+<body>
+<div class="form-card">
+  <div class="card-header">
+    <h2>New Grievance</h2>
+    <a href="student-hub.html" class="back-link">← Back to Hub</a>
+  </div>
+
+  <div id="alertBox" class="alert"></div>
+
+  <div class="input-box">
+    <label>Department</label>
+    <select id="department">
+      <option>Academic Affairs</option>
+      <option>Hostel &amp; Infrastructure</option>
+      <option>Technical Support</option>
+      <option>Library Services</option>
+      <option>Administration</option>
+    </select>
+  </div>
+
+  <div class="input-box">
+    <label>Subject</label>
+    <input type="text" id="title" placeholder="Short summary of the issue" required maxlength="120">
+  </div>
+
+  <div class="input-box">
+    <label>Detailed Description</label>
+    <textarea id="description" rows="5" placeholder="Tell us more about your issue in detail..." required></textarea>
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="submitComplaint()">Submit Request</button>
+</div>
+
+<script>
+  const API = 'http://localhost:8080/api';
+
+  // Auth guard — redirect if not logged in
+  const token = sessionStorage.getItem('studentToken');
+  if (!token) {
+    alert('Please log in to file a complaint.');
+    window.location.href = 'student-login.html';
+  }
+
+  function showAlert(msg, type) {
+    const box = document.getElementById('alertBox');
+    box.textContent = msg;
+    box.className = 'alert ' + type;
+  }
+
+  async function submitComplaint() {
+    const title       = document.getElementById('title').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const department  = document.getElementById('department').value;
+
+    if (!title) { showAlert('Please enter a subject for your complaint.', 'error'); return; }
+    if (!description || description.length < 10) { showAlert('Please provide a detailed description (min 10 characters).', 'error'); return; }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled    = true;
+    btn.textContent = 'Submitting...';
+
+    try {
+      const res  = await fetch(`${API}/complaints`, {
+        method:  'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ title, description, department })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        showAlert(data.message || 'Failed to submit. Please try again.', 'error');
+      } else {
+        showAlert('✅ Complaint filed successfully! Our team will review it shortly.', 'success');
+        document.getElementById('title').value       = '';
+        document.getElementById('description').value = '';
+        setTimeout(() => { window.location.href = 'analytics.html'; }, 1800);
+      }
+    } catch (err) {
+      showAlert('Cannot reach server. Make sure the backend is running on port 8080.', 'error');
+    } finally {
+      btn.disabled    = false;
+      btn.textContent = 'Submit Request';
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGMS Elite | Secure Gateway</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-orange: #ff8c00;
+      --deep-orange: #e67e00;
+      --bg-light: #f8fafc;
+      --text-dark: #0f172a;
+      --text-slate: #64748b;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background-color: var(--bg-light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: radial-gradient(#ff8c0010 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    .login-container {
+      width: 920px;
+      background: #ffffff;
+      border-radius: 40px;
+      display: flex;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.08);
+      overflow: hidden;
+      border: 1px solid #f1f5f9;
+    }
+
+    .login-visual {
+      flex: 1;
+      background: linear-gradient(135deg, #ff8c00 0%, #f72585 100%);
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: white;
+    }
+
+    .login-visual h2 { font-size: 2.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+    .login-visual p  { font-size: 0.95rem; opacity: 0.9; font-weight: 500; line-height: 1.6; }
+    .visual-footer   { margin-top: auto; font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; opacity: 0.6; text-transform: uppercase; }
+
+    .login-forms {
+      flex: 1.2;
+      padding: 50px 55px;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+
+    /* Role + Action Toggle */
+    .form-toggle {
+      display: flex;
+      background: #f1f5f9;
+      padding: 5px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 11px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: 0.3s;
+      background: transparent;
+      color: var(--text-slate);
+    }
+
+    .toggle-btn.active {
+      background: white;
+      color: var(--primary-orange);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .input-group { margin-bottom: 16px; }
+    .input-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 2px solid #f1f5f9;
+      background: #f8fafc;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: 0.3s;
+      outline: none;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      border-color: var(--primary-orange);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.08);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary-orange);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(255, 140, 0, 0.22);
+      transition: 0.3s;
+      margin-top: 8px;
+    }
+
+    .btn-login:hover    { background: var(--deep-orange); transform: translateY(-2px); }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-login.dark     { background: var(--text-dark); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+    .btn-login.dark:hover { background: #1e293b; }
+
+    .form-section { display: none; }
+    .form-section.active { display: block; animation: fadeIn 0.4s ease; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Alert */
+    .alert {
+      padding: 11px 15px;
+      border-radius: 10px;
+      font-size: 0.83rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .alert.error   { background: #fff1f2; color: #be123c; border: 1px solid #fecaca; display: block; }
+    .alert.success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; display: block; }
+
+    /* Sub-toggle for login/register */
+    .sub-toggle { display: flex; gap: 10px; margin-bottom: 20px; }
+    .sub-btn {
+      padding: 7px 18px;
+      border-radius: 20px;
+      border: 2px solid #f1f5f9;
+      background: transparent;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.3s;
+      color: var(--text-slate);
+    }
+    .sub-btn.active { background: #fff7ed; border-color: var(--primary-orange); color: var(--primary-orange); }
+
+    .secret-hint {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-top: 5px;
+      text-align: left;
+      padding-left: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="login-visual">
+    <div style="font-weight:800;font-size:1.3rem;margin-bottom:40px;">SGMS <span>Elite</span></div>
+    <h2>Secure Institutional Access</h2>
+    <p>Authorized personnel only. Your access is monitored for institutional integrity and security.</p>
+    <div class="visual-footer" style="margin-top: 40px;">SIES GST &bull; Secure Framework 2026</div>
+  </div>
+
+  <div class="login-forms">
+    <!-- Role Toggle -->
+    <div class="form-toggle">
+      <button class="toggle-btn active" onclick="switchRole('staff')">Faculty Node</button>
+      <button class="toggle-btn" onclick="switchRole('admin')">Super Admin</button>
+    </div>
+
+    <!-- Alert -->
+    <div id="alertBox" class="alert"></div>
+
+    <!-- ── STAFF SECTION ────────────────────────────── -->
+    <div id="staff-form" class="form-section active">
+      <div class="sub-toggle">
+        <button class="sub-btn active" onclick="switchAction('staff','login')">Login</button>
+        <button class="sub-btn" onclick="switchAction('staff','register')">New Account</button>
+      </div>
+
+      <!-- Staff Login -->
+      <div id="staff-login" class="form-section active">
+        <h3 style="margin-bottom:6px;font-weight:800;">Staff Login</h3>
+        <p style="color:var(--text-slate);font-size:0.85rem;margin-bottom:20px;">Enter your departmental credentials.</p>
+        <div class="input-group">
+          <label>Email Address</label>
+          <input type="email" id="staffLoginEmail" placeholder="faculty@siesgst.ac.in" required>
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="staffLoginPwd" placeholder="••••••••" required>
+        </div>
+        <button class="btn-login" id="staffLoginBtn" onclick="handleAdminLogin()">Enter Faculty Node</button>
+      </div>
+
+      <!-- Staff Register -->
+      <div id="staff-register" class="form-section">
+        <h3 style="margin-bottom:6px;font-weight:800;">Create Staff Account</h3>
+        <p style="color:var(--text-slate);font-size:0.85rem;margin-bottom:20px;">Requires the institutional admin code.</p>
+        <div class="input-group">
+          <label>Full Name</label>
+          <input type="text" id="staffRegName" placeholder="Dr. / Prof. Name">
+        </div>
+        <div class="input-group">
+          <label>Email Address</label>
+          <input type="email" id="staffRegEmail" placeholder="faculty@siesgst.ac.in">
+        </div>
+        <div class="input-group">
+          <label>Department</label>
+          <select id="staffRegDept">
+            <option>Computer Engineering</option>
+            <option>Information Technology</option>
+            <option>Electronics & Telecom</option>
+            <option>Mechanical Engineering</option>
+            <option>Civil Engineering</option>
+            <option>General</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="staffRegPwd" placeholder="Min. 6 characters">
+        </div>
+        <div class="input-group">
+          <label>Admin Registration Code</label>
+          <input type="password" id="staffRegSecret" placeholder="Provided by Super Admin">
+          <div class="secret-hint">Contact your Super Admin for this code.</div>
+        </div>
+        <button class="btn-login" id="staffRegBtn" onclick="handleAdminRegister('faculty')">Create Staff Account</button>
+      </div>
+    </div>
+
+    <!-- ── SUPER ADMIN SECTION ──────────────────────── -->
+    <div id="admin-form" class="form-section">
+      <div class="sub-toggle">
+        <button class="sub-btn active" onclick="switchAction('admin','login')">Login</button>
+        <button class="sub-btn" onclick="switchAction('admin','register')">New Account</button>
+      </div>
+
+      <!-- Admin Login -->
+      <div id="admin-login" class="form-section active">
+        <h3 style="margin-bottom:6px;font-weight:800;">Command Center</h3>
+        <p style="color:var(--text-slate);font-size:0.85rem;margin-bottom:20px;">Elevated credentials required.</p>
+        <div class="input-group">
+          <label>Admin Email</label>
+          <input type="email" id="adminLoginEmail" placeholder="admin@siesgst.ac.in" required>
+        </div>
+        <div class="input-group">
+          <label>Secret Key</label>
+          <input type="password" id="adminLoginPwd" placeholder="••••••••" required>
+        </div>
+        <button class="btn-login dark" id="adminLoginBtn" onclick="handleAdminLogin(true)">Authenticate Admin</button>
+      </div>
+
+      <!-- Admin Register -->
+      <div id="admin-register" class="form-section">
+        <h3 style="margin-bottom:6px;font-weight:800;">Create Admin Account</h3>
+        <p style="color:var(--text-slate);font-size:0.85rem;margin-bottom:20px;">Super admin registration with master code.</p>
+        <div class="input-group">
+          <label>Full Name</label>
+          <input type="text" id="adminRegName" placeholder="Administrator Name">
+        </div>
+        <div class="input-group">
+          <label>Email Address</label>
+          <input type="email" id="adminRegEmail" placeholder="admin@siesgst.ac.in">
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="adminRegPwd" placeholder="Min. 6 characters">
+        </div>
+        <div class="input-group">
+          <label>Master Admin Code</label>
+          <input type="password" id="adminRegSecret" placeholder="Master registration code">
+          <div class="secret-hint">Default code: SIESGST_ADMIN_2026 (change in .env)</div>
+        </div>
+        <button class="btn-login dark" id="adminRegBtn" onclick="handleAdminRegister('super_admin')">Create Admin Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:8080/api';
+
+  // Clear all sessions on page load
+  sessionStorage.clear();
+
+  let currentRole = 'staff';
+
+  function switchRole(role) {
+    currentRole = role;
+    document.querySelectorAll('.toggle-btn').forEach((b, i) => {
+      b.classList.toggle('active', (i === 0 && role === 'staff') || (i === 1 && role === 'admin'));
+    });
+    document.getElementById('staff-form').classList.toggle('active', role === 'staff');
+    document.getElementById('admin-form').classList.toggle('active', role === 'admin');
+    hideAlert();
+  }
+
+  function switchAction(role, action) {
+    const prefix   = role === 'staff' ? 'staff' : 'admin';
+    const parent   = document.getElementById(prefix + '-form');
+    const btns     = parent.querySelectorAll('.sub-btn');
+    btns[0].classList.toggle('active', action === 'login');
+    btns[1].classList.toggle('active', action === 'register');
+
+    document.getElementById(prefix + '-login').classList.toggle('active', action === 'login');
+    document.getElementById(prefix + '-register').classList.toggle('active', action === 'register');
+    hideAlert();
+  }
+
+  function showAlert(msg, type) {
+    const box = document.getElementById('alertBox');
+    box.textContent = msg;
+    box.className = 'alert ' + type;
+  }
+  function hideAlert() { document.getElementById('alertBox').className = 'alert'; }
+
+  function setLoading(btnId, loading, label) {
+    const btn = document.getElementById(btnId);
+    btn.disabled    = loading;
+    btn.textContent = loading ? 'Please wait...' : label;
+  }
+
+  async function handleAdminLogin(isSuperAdmin = false) {
+    const prefix = isSuperAdmin ? 'admin' : 'staff';
+    const email  = document.getElementById(prefix + 'LoginEmail').value.trim();
+    const pwd    = document.getElementById(prefix + 'LoginPwd').value;
+    const btnId  = prefix + 'LoginBtn';
+
+    if (!email || !pwd) { showAlert('Email and password are required.', 'error'); return; }
+
+    setLoading(btnId, true, isSuperAdmin ? 'Authenticate Admin' : 'Enter Faculty Node');
+    hideAlert();
+
+    try {
+      const res  = await fetch(`${API}/admin/login`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email, password: pwd })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        showAlert(data.message || 'Login failed.', 'error');
+      } else {
+        sessionStorage.setItem('adminToken', data.token);
+        sessionStorage.setItem('adminData',  JSON.stringify(data.admin));
+        showAlert('Login successful! Redirecting...', 'success');
+        const dest = data.admin.role === 'super_admin' ? 'admindashboard.html' : 'staffworkflow.html';
+        setTimeout(() => { window.location.href = dest; }, 800);
+      }
+    } catch (err) {
+      showAlert('Cannot reach server. Make sure the backend is running on port 8080.', 'error');
+    } finally {
+      setLoading(btnId, false, isSuperAdmin ? 'Authenticate Admin' : 'Enter Faculty Node');
+    }
+  }
+
+  async function handleAdminRegister(role) {
+    const prefix     = role === 'super_admin' ? 'admin' : 'staff';
+    const name       = document.getElementById(prefix + 'RegName').value.trim();
+    const email      = document.getElementById(prefix + 'RegEmail').value.trim();
+    const pwd        = document.getElementById(prefix + 'RegPwd').value;
+    const secret     = document.getElementById(prefix + 'RegSecret').value;
+    const dept       = role === 'faculty' ? document.getElementById('staffRegDept').value : 'Administration';
+    const btnId      = prefix + 'RegBtn';
+    const btnLabel   = role === 'super_admin' ? 'Create Admin Account' : 'Create Staff Account';
+
+    if (!name || !email || !pwd || !secret) { showAlert('All fields are required.', 'error'); return; }
+    if (pwd.length < 6) { showAlert('Password must be at least 6 characters.', 'error'); return; }
+
+    setLoading(btnId, true, btnLabel);
+    hideAlert();
+
+    try {
+      const res  = await fetch(`${API}/admin/register`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ name, email, password: pwd, role, department: dept, adminSecret: secret })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        showAlert(data.message || 'Registration failed.', 'error');
+      } else {
+        sessionStorage.setItem('adminToken', data.token);
+        sessionStorage.setItem('adminData',  JSON.stringify(data.admin));
+        showAlert('Account created! Redirecting...', 'success');
+        const dest = role === 'super_admin' ? 'admindashboard.html' : 'staffworkflow.html';
+        setTimeout(() => { window.location.href = dest; }, 800);
+      }
+    } catch (err) {
+      showAlert('Cannot reach server. Make sure the backend is running on port 8080.', 'error');
+    } finally {
+      setLoading(btnId, false, btnLabel);
+    }
+  }
+</script>
+
+</body>
+</html>

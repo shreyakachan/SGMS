@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vigilance Reports | Admin</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #1c1e21;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    margin: 0;
+}
+
+.container {
+    background: #ffffff;
+    max-width: 700px;
+    width: 100%;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+header {
+    border-bottom: 3px solid #d93025;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+}
+
+h1 {
+    color: #d93025;
+    margin: 0;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.report-card {
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #f8f9fa;
+}
+
+.report-card p {
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+.tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: white;
+}
+
+.harassment { background: #d93025; }
+.corruption { background: #9334e6; }
+.exam { background: #f9ab00; }
+.admin { background: #1a73e8; }
+
+.empty {
+    text-align: center;
+    color: #5f6368;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <header>
+        <h1>Vigilance Reports</h1>
+        <p class="subtitle">Confidential Submissions Overview</p>
+    </header>
+
+    <div id="reportsContainer"></div>
+</div>
+
+<script>
+async function loadReports() {
+    try {
+        const res = await fetch('http://localhost:8080/api/reports');
+        const reports = await res.json();
+
+        const container = document.getElementById('reportsContainer');
+
+        if (reports.length === 0) {
+            container.innerHTML = "<p class='empty'>No reports submitted yet.</p>";
+            return;
+        }
+
+        reports.forEach(r => {
+            const div = document.createElement('div');
+            div.className = "report-card";
+
+            div.innerHTML = `
+                <p><strong>ID:</strong> ${r.trackingId}</p>
+                <p><strong>Type:</strong> 
+                    <span class="tag ${r.type}">${r.type}</span>
+                </p>
+                <p><strong>Description:</strong> ${r.description}</p>
+                <p><strong>User:</strong> ${r.isAnonymous ? "Anonymous" : r.email}</p>
+                <p><strong>Date:</strong> ${new Date(r.createdAt).toLocaleString()}</p>
+            `;
+
+            container.appendChild(div);
+        });
+
+    } catch (err) {
+        document.getElementById('reportsContainer').innerHTML = 
+            "<p class='empty'>Error loading reports</p>";
+        console.error(err);
+    }
+}
+
+loadReports();
+</script>
+
+</body>
+</html>

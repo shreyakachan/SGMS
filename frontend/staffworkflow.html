@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGMS Elite | Faculty Node</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary-orange:#ff8c00; --bg-white:#ffffff; --bg-soft:#f8fafc; --text-dark:#0f172a; --text-slate:#64748b; --border:#e2e8f0; }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans',sans-serif; }
+    body { background:var(--bg-soft); color:var(--text-dark); display:flex; }
+
+    .faculty-sidebar { width:268px; background:var(--bg-white); border-right:1px solid var(--border); padding:38px 22px; height:100vh; position:fixed; display:flex; flex-direction:column; }
+    .dept-tag { background:#fff7ed; color:var(--primary-orange); padding:5px 11px; border-radius:7px; font-size:0.67rem; font-weight:800; text-transform:uppercase; display:inline-block; margin-bottom:18px; }
+    .sidebar-logo { font-size:1.4rem; font-weight:800; margin-bottom:36px; color:var(--text-dark); letter-spacing:-1px; }
+    .sidebar-logo span { color:var(--primary-orange); }
+    .nav-item { padding:12px 16px; border-radius:11px; text-decoration:none; color:var(--text-slate); font-weight:600; display:flex; align-items:center; gap:10px; margin-bottom:4px; transition:0.2s; font-size:0.87rem; }
+    .nav-item.active, .nav-item:hover { background:var(--bg-soft); color:var(--primary-orange); }
+    .nav-item.logout { color:#ef4444; margin-top:auto; }
+    .nav-item.logout:hover { background:#fff1f2; }
+
+    .content { margin-left:268px; flex:1; padding:38px; }
+    .header-flex { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:36px; }
+
+    .workflow-grid { display:grid; grid-template-columns:2fr 1fr; gap:22px; }
+
+    .glass-card { background:white; border-radius:22px; padding:26px; border:1px solid var(--border); box-shadow:0 4px 12px rgba(0,0,0,0.025); }
+
+    .case-row { padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; transition:0.3s; }
+    .case-row:hover { border-color:var(--primary-orange); background:#fffcf9; }
+
+    .priority-dot { width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:7px; }
+    .p-high   { background:#ef4444; box-shadow:0 0 7px #ef4444; }
+    .p-medium { background:#f97316; }
+    .p-normal { background:#94a3b8; }
+
+    .btn-action { padding:8px 16px; background:var(--primary-orange); color:white; border:none; border-radius:9px; font-weight:700; cursor:pointer; font-size:0.8rem; transition:0.2s; }
+    .btn-action:hover { transform:translateY(-1px); }
+    .btn-action.secondary { background:#f1f5f9; color:var(--text-dark); }
+
+    .chart-container { height:195px; margin-top:18px; }
+
+    .stat-mini { display:flex; justify-content:space-between; margin-bottom:18px; }
+    .stat-mini-item { text-align:center; }
+    .stat-mini-value { font-size:1.5rem; font-weight:800; color:var(--primary-orange); }
+    .stat-mini-label { font-size:0.68rem; color:var(--text-slate); text-transform:uppercase; letter-spacing:1px; font-weight:700; margin-top:2px; }
+
+    .empty-msg { text-align:center; padding:30px; color:var(--text-slate); font-weight:600; font-size:0.88rem; }
+
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.38); backdrop-filter:blur(4px); z-index:1000; display:none; justify-content:center; align-items:center; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:white; border-radius:24px; padding:32px; width:480px; max-width:95vw; box-shadow:0 28px 55px rgba(0,0,0,0.13); animation:popIn 0.3s ease; }
+    @keyframes popIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+    .modal h3 { font-size:1.1rem; font-weight:800; margin-bottom:20px; }
+    .modal-field { margin-bottom:13px; }
+    .modal-field label { display:block; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-slate); margin-bottom:5px; }
+    .modal-field select, .modal-field textarea { width:100%; padding:11px 15px; border-radius:11px; border:2px solid #f1f5f9; font-size:0.88rem; outline:none; font-family:'Plus Jakarta Sans',sans-serif; transition:0.2s; }
+    .modal-field select:focus, .modal-field textarea:focus { border-color:var(--primary-orange); }
+    .modal-btns { display:flex; gap:10px; justify-content:flex-end; margin-top:12px; }
+    .btn-cancel { background:#f1f5f9; color:var(--text-slate); border:none; padding:10px 18px; border-radius:9px; font-weight:700; cursor:pointer; font-size:0.83rem; }
+    .btn-save   { background:var(--primary-orange); color:white; border:none; padding:10px 20px; border-radius:9px; font-weight:700; cursor:pointer; font-size:0.83rem; }
+
+    .toast { position:fixed; bottom:26px; right:26px; background:#0f172a; color:white; padding:12px 20px; border-radius:12px; font-weight:700; font-size:0.83rem; z-index:9999; transform:translateY(80px); opacity:0; transition:0.4s; }
+    .toast.show { transform:translateY(0); opacity:1; }
+  </style>
+</head>
+<body>
+
+<nav class="faculty-sidebar">
+  <div class="dept-tag" id="deptTag">Computer Engineering</div>
+  <div class="sidebar-logo">SGMS <span>Faculty</span></div>
+  <a href="admindashboard.html" class="nav-item">📥 All Complaints</a>
+  <a href="staffworkflow.html" class="nav-item active">✅ My Queue</a>
+  <a href="#" class="nav-item logout" onclick="logout()">🚪 Logout</a>
+</nav>
+
+<main class="content">
+  <div class="header-flex">
+    <div>
+      <h1 style="font-weight:800;letter-spacing:-1px;font-size:1.9rem;">Departmental Workflow</h1>
+      <p style="color:var(--text-slate);margin-top:4px;font-size:0.88rem;">Manage and resolve student grievances for your sector.</p>
+    </div>
+    <span id="adminBadge" style="background:#f1f5f9;padding:10px 18px;border-radius:12px;font-weight:700;font-size:0.84rem;">Loading...</span>
+  </div>
+
+  <div class="workflow-grid">
+    <!-- LEFT: Complaints -->
+    <div class="glass-card">
+      <h3 style="margin-bottom:22px;font-size:0.97rem;font-weight:800;">Active Grievance Stream</h3>
+      <div id="caseList"><div class="empty-msg">Loading complaints...</div></div>
+    </div>
+
+    <!-- RIGHT: Stats + Chart -->
+    <div class="glass-card">
+      <h3 style="margin-bottom:18px;font-size:0.97rem;font-weight:800;">Dept. Health</h3>
+      <div class="stat-mini">
+        <div class="stat-mini-item"><div class="stat-mini-value" id="sPending">—</div><div class="stat-mini-label">Pending</div></div>
+        <div class="stat-mini-item"><div class="stat-mini-value" id="sReview" style="color:#1d4ed8;">—</div><div class="stat-mini-label">Review</div></div>
+        <div class="stat-mini-item"><div class="stat-mini-value" id="sResolved" style="color:#15803d;">—</div><div class="stat-mini-label">Resolved</div></div>
+      </div>
+      <div class="chart-container"><canvas id="deptChart"></canvas></div>
+      <div style="margin-top:24px;border-top:1px solid var(--border);padding-top:18px;">
+        <h4 style="font-size:0.75rem;text-transform:uppercase;color:var(--text-slate);font-weight:700;margin-bottom:10px;">Quick Links</h4>
+        <a href="admindashboard.html" style="display:block;margin-bottom:8px;color:var(--primary-orange);font-weight:700;text-decoration:none;font-size:0.87rem;">→ Full Dashboard</a>
+        <a href="support.html" style="display:block;color:var(--primary-orange);font-weight:700;text-decoration:none;font-size:0.87rem;">→ Support Center</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- UPDATE MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Update Complaint</h3>
+    <input type="hidden" id="modalId">
+    <div class="modal-field">
+      <label>New Status</label>
+      <select id="modalStatus">
+        <option>Pending</option><option>Under Review</option>
+        <option>Resolved</option><option>Closed</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Resolution Note (optional)</label>
+      <textarea id="modalNote" rows="3" placeholder="Add a note for the student..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveUpdate()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API   = 'http://localhost:8080/api';
+  const token = sessionStorage.getItem('adminToken');
+  const admin = JSON.parse(sessionStorage.getItem('adminData') || '{}');
+
+  if (!token) { alert('Please log in.'); window.location.href = 'login.html'; }
+
+  document.getElementById('adminBadge').textContent = '👋 ' + (admin.name || 'Faculty');
+  if (admin.department) document.getElementById('deptTag').textContent = admin.department;
+
+  let chartInstance = null;
+
+  async function loadData() {
+    try {
+      const [cRes, sRes] = await Promise.all([
+        fetch(`${API}/complaints`,       { headers: { Authorization: 'Bearer ' + token } }),
+        fetch(`${API}/complaints/stats`, { headers: { Authorization: 'Bearer ' + token } })
+      ]);
+      if (cRes.status === 401) { logout(); return; }
+
+      const complaints = await cRes.json();
+      const stats      = await sRes.json();
+
+      document.getElementById('sPending').textContent  = stats.pending     || 0;
+      document.getElementById('sReview').textContent   = stats.underReview || 0;
+      document.getElementById('sResolved').textContent = stats.resolved    || 0;
+
+      renderCases(complaints);
+      renderChart(stats);
+    } catch (e) {
+      document.getElementById('caseList').innerHTML = '<div class="empty-msg">⚠️ Cannot reach server.</div>';
+    }
+  }
+
+  function renderCases(list) {
+    const el = document.getElementById('caseList');
+    if (!list.length) { el.innerHTML = '<div class="empty-msg">✅ No pending cases!</div>'; return; }
+
+    el.innerHTML = list.slice(0, 8).map(c => {
+      const name = c.student?.name || 'Unknown';
+      const date = new Date(c.createdAt).toLocaleDateString('en-IN', { day:'2-digit', month:'short' });
+      const dot  = c.status === 'Pending' ? 'p-high' : c.status === 'Under Review' ? 'p-medium' : 'p-normal';
+      const label = c.status === 'Pending' ? 'URGENT' : c.status.toUpperCase();
+      const btnStyle = c.status === 'Resolved' || c.status === 'Closed' ? 'secondary' : '';
+
+      return `
+        <div class="case-row">
+          <div>
+            <div style="font-size:0.72rem;color:var(--text-slate);margin-bottom:3px;">${c.department} — ${date}</div>
+            <h4 style="font-weight:700;font-size:0.9rem;">${c.title}</h4>
+            <p style="font-size:0.8rem;color:var(--text-slate);margin-top:3px;">By: ${name}</p>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-size:0.75rem;font-weight:800;color:#ef4444;display:block;margin-bottom:8px;">
+              <span class="priority-dot ${dot}"></span>${label}
+            </span>
+            <button class="btn-action ${btnStyle}" onclick="openModal('${c._id}','${c.status}')">Update</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function renderChart(stats) {
+    const ctx = document.getElementById('deptChart').getContext('2d');
+    if (chartInstance) chartInstance.destroy();
+    chartInstance = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Resolved', 'Pending', 'Under Review', 'Closed'],
+        datasets: [{
+          data: [stats.resolved||0, stats.pending||0, stats.underReview||0, stats.closed||0],
+          backgroundColor: ['#ff8c00', '#f1f5f9', '#1d4ed8', '#0f172a'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        plugins: { legend: { position:'bottom', labels: { boxWidth:9, font:{ family:'Plus Jakarta Sans', weight:'700', size:11 } } } },
+        cutout: '68%'
+      }
+    });
+  }
+
+  function openModal(id, status) {
+    document.getElementById('modalId').value     = id;
+    document.getElementById('modalStatus').value = status;
+    document.getElementById('modalNote').value   = '';
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+  async function saveUpdate() {
+    const id     = document.getElementById('modalId').value;
+    const status = document.getElementById('modalStatus').value;
+    const note   = document.getElementById('modalNote').value.trim();
+    try {
+      const res  = await fetch(`${API}/complaints/${id}/status`, {
+        method:  'PATCH',
+        headers: { 'Content-Type':'application/json', Authorization:'Bearer '+token },
+        body:    JSON.stringify({ status, adminNote: note })
+      });
+      const data = await res.json();
+      if (!res.ok) { showToast('❌ ' + data.message); return; }
+      closeModal();
+      showToast('✅ Updated!');
+      loadData();
+    } catch (e) { showToast('❌ Server error.'); }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id === 'modalOverlay') closeModal(); });
+
+  loadData();
+</script>
+</body>
+</html>

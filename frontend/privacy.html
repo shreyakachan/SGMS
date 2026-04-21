@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy | SGMS Elite</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
+body{background:radial-gradient(circle,#ffffff,#f4f7ff);}
+
+nav{
+width:90%;max-width:1280px;height:76px;margin:20px auto;border-radius:22px;
+background:rgba(255,255,255,0.8);backdrop-filter:blur(15px);
+display:flex;justify-content:space-between;align-items:center;padding:0 36px;
+box-shadow:0 8px 28px rgba(0,0,0,0.03);
+}
+
+.nav-logo{font-size:1.5rem;font-weight:800;}
+.nav-logo span{
+background:linear-gradient(135deg,#ff8c00,#f72585);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.container{max-width:1100px;margin:60px auto;padding:20px;}
+
+.header{text-align:center;margin-bottom:50px;}
+.header h1{font-size:3rem;font-weight:800;}
+.header span{
+background:linear-gradient(135deg,#ff8c00,#f72585);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.header p{color:#64748b;margin-top:10px;}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+
+.card{
+background:white;border-radius:26px;padding:28px;
+box-shadow:0 12px 30px rgba(0,0,0,0.05);
+transition:0.4s;position:relative;overflow:hidden;
+}
+.card::after{
+content:"";position:absolute;inset:0;
+background:linear-gradient(135deg,#ff8c00,#f72585);
+opacity:0;transition:0.4s;
+}
+.card:hover::after{opacity:0.08;}
+.card:hover{transform:translateY(-8px);}
+
+.card h3{margin-bottom:10px;}
+.card p{color:#64748b;font-size:0.9rem;}
+
+@media(max-width:900px){.grid{grid-template-columns:1fr;}}
+.back-btn {
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-right: 15px;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  color: #ff8c00;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a href="index.html" class="back-btn">← Back</a>  
+  <div class="nav-logo">SGMS <span>Elite</span></div>
+</nav>
+
+<div class="container">
+  <div class="header">
+    <h1>Data <span>Privacy</span></h1>
+    <p>Your information is protected with institutional-grade security.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Data Protection</h3>
+      <p>All user data is encrypted and securely stored.</p>
+    </div>
+    <div class="card">
+      <h3>Confidential Complaints</h3>
+      <p>Only authorized staff can access sensitive data.</p>
+    </div>
+    <div class="card">
+      <h3>No Data Sharing</h3>
+      <p>Your data is never shared with third parties.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

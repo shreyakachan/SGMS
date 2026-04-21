@@ -1,0 +1,156 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGMS Elite | SIES GST Institutional Portal</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background: #ffffff; background: radial-gradient(circle at 50% 50%, #ffffff 0%, #f4f7ff 100%); min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+
+    nav {
+      width: 90%; max-width: 1280px; height: 76px;
+      background: rgba(255,255,255,0.82); backdrop-filter: blur(15px);
+      margin-top: 20px; border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.45);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 36px; position: sticky; top: 20px; z-index: 1000;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.03);
+    }
+    .nav-logo { font-size: 1.55rem; font-weight: 800; color: #0f172a; letter-spacing: -1px; text-decoration: none; }
+    .nav-logo span { background: linear-gradient(135deg,#ff8c00,#f72585); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links li a { text-decoration: none; color: #64748b; font-weight: 600; font-size: 0.92rem; transition: 0.3s; }
+    .nav-links li a:hover, .nav-links li a.active { color: #ff8c00; }
+    .nav-btn { background: linear-gradient(135deg,#ff8c00,#f72585); color: white; padding: 10px 22px; border-radius: 13px; font-weight: 700; font-size: 0.83rem; text-decoration: none; transition: 0.3s; box-shadow: 0 7px 14px rgba(255,107,0,0.18); }
+    .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 20px rgba(255,107,0,0.26); }
+
+    .container {
+  display: flex;
+  flex-direction: column; /* Stacks Header on top of the Grid */
+  align-items: center;    /* Centers the content horizontally */
+  width: 100%;
+  max-width: 1280px;
+  padding: 72px 28px;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+    header { text-align: center; margin-bottom: 72px; }
+    .eyebrow { display: inline-block; background: #fff7ed; color: #ff8c00; font-size: 0.72rem; font-weight: 800; padding: 6px 16px; border-radius: 50px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 22px; border: 1px solid #fde8c8; }
+    header h1 { font-size: 3.7rem; font-weight: 800; color: #0f172a; letter-spacing: -3px; line-height: 1.05; }
+    header h1 span { background: linear-gradient(135deg,#ff8c00,#f72585); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    header p { margin-top: 20px; color: #64748b; font-weight: 500; font-size: 1.08rem; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+
+    .institution-strip { display: flex; gap: 10px; justify-content: center; margin-top: 22px; flex-wrap: wrap; }
+    .inst-tag { background: #f1f5f9; padding: 6px 16px; border-radius: 50px; font-size: 0.76rem; font-weight: 700; color: #64748b; letter-spacing: 1px; }
+
+    .portal-grid { display: flex;            /* Use Flex for easy horizontal spacing */
+  justify-content: center;  /* Keeps cards centered */
+  gap: 32px;                /* Equal space between cards */
+  width: 100%;
+  flex-wrap: wrap;}
+
+    .card {
+      flex: 1;
+  min-width: 300px;
+  max-width: 300px;
+      background: linear-gradient(135deg,#ff8c00 0%,#f72585 100%);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 32px; padding: 46px 28px;
+      text-decoration: none; display: flex; flex-direction: column; align-items: center; text-align: center;
+      transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
+      box-shadow: 0 14px 32px rgba(247,37,133,0.14);
+      overflow: hidden; position: relative;
+      
+    }
+    .card::after { content:''; position:absolute; top:22px; right:22px; width:7px; height:7px; background:#fff; border-radius:50%; box-shadow:0 0 9px #fff; animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+    .icon-square { width:66px; height:66px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); backdrop-filter:blur(5px); border-radius:19px; margin-bottom:26px; display:flex; justify-content:center; align-items:center; transition:all 0.55s cubic-bezier(0.23,1,0.32,1); }
+    .icon-inner  { width:14px; height:14px; background:#ffffff; border-radius:3px; transition:all 0.55s; }
+
+    .card h3 { font-size:1.45rem; font-weight:800; color:#fff; margin-bottom:12px; transition:0.4s; }
+    .card p  { font-size:0.9rem; color:rgba(255,255,255,0.9); line-height:1.55; transition:0.4s; font-weight:500; }
+
+    .card-label { margin-top:26px; padding:10px 24px; background:#fff; border-radius:50px; font-size:0.76rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; transition:0.3s; display:inline-block; }
+    .card-label span { background:linear-gradient(135deg,#ff8c00,#f72585); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+    .card:hover { background:#ffffff; transform:translateY(-14px); box-shadow:0 28px 55px rgba(0,0,0,0.07); border-color:#ff8c00; }
+    .card:hover .icon-square { background:#ff8c00; border-color:#ff8c00; transform:rotate(45deg); }
+    .card:hover .icon-inner  { background:#fff; transform:rotate(-45deg); }
+    .card:hover h3 { color:#0f172a; }
+    .card:hover p  { color:#64748b; }
+    .card:hover .card-label { background:linear-gradient(135deg,#ff8c00,#f72585); transform:scale(1.04); }
+    .card:hover .card-label span { -webkit-text-fill-color:#fff; }
+
+    footer { margin-top: auto; padding: 36px; text-align: center; color: #94a3b8; font-size: 0.73rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; }
+
+    @media (max-width:1100px) { .portal-grid { grid-template-columns:repeat(2,1fr); } header h1 { font-size: 2.8rem; } }
+    @media (max-width:640px)  { .portal-grid { grid-template-columns:1fr; } header h1 { font-size: 2.1rem; } nav { padding: 0 16px; } .nav-links { display:none; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">SGMS <span>Elite</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="governance.html">Governance</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+    <li><a href="guidelines.html">Guidelines</a></li>
+  </ul>
+  <a href="support.html" class="nav-btn">Help Desk</a>
+</nav>
+
+<div class="container">
+  <header>
+    <div class="eyebrow">SIES GST · Est. 2026</div>
+    <h1>Student Grievance<br><span>Management System</span></h1>
+    <p>A unified, secure platform for students of SIES Graduate School of Technology to raise, track, and resolve institutional grievances.</p>
+    <div class="institution-strip">
+      <span class="inst-tag">SIES GST</span>
+      <span class="inst-tag">SGMS ELITE</span>
+      <span class="inst-tag">SECURE FRAMEWORK</span>
+      <span class="inst-tag">2026</span>
+    </div>
+  </header>
+
+  <div class="portal-grid">
+    <a href="student-login.html" class="card">
+      <div class="icon-square"><div class="icon-inner"></div></div>
+      <h3>Student Hub</h3>
+      <p>Register complaints, track cases in real-time, and view your resolution history.</p>
+      <div class="card-label"><span>Enter Portal</span></div>
+    </a>
+
+  
+
+    <a href="login.html" class="card">
+      <div class="icon-square"><div class="icon-inner"></div></div>
+      <h3>Staff Node</h3>
+      <p>Faculty response tools and departmental resolution workflows for staff.</p>
+      <div class="card-label"><span>Faculty Access</span></div>
+    </a>
+
+    <a href="login.html" class="card">
+      <div class="icon-square"><div class="icon-inner"></div></div>
+      <h3>Super Admin</h3>
+      <p>System-wide analytics, user management, and executive oversight console.</p>
+      <div class="card-label"><span>Command Center</span></div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  Secured Framework &bull; SIES GST &bull; SGMS Elite &bull; 2026
+</footer>
+
+<script>
+  // Always clear any leftover sessions when landing on home page
+  sessionStorage.clear();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Governance | SGMS Elite</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+  background: radial-gradient(circle at 50% 50%, #ffffff, #f4f7ff);
+  min-height:100vh;
+}
+
+/* NAVBAR (same as homepage) */
+nav {
+  width:90%;
+  max-width:1280px;
+  height:76px;
+  margin:20px auto;
+  border-radius:22px;
+  background:rgba(255,255,255,0.8);
+  backdrop-filter:blur(15px);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 36px;
+  box-shadow:0 8px 28px rgba(0,0,0,0.03);
+}
+
+.nav-logo {
+  font-size:1.5rem;
+  font-weight:800;
+}
+
+.nav-logo span {
+  background:linear-gradient(135deg,#ff8c00,#f72585);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* CONTAINER */
+.container {
+  max-width:1200px;
+  margin:60px auto;
+  padding:20px;
+}
+
+/* HEADER */
+.header {
+  text-align:center;
+  margin-bottom:60px;
+}
+
+.header h1 {
+  font-size:3rem;
+  font-weight:800;
+}
+
+.header span {
+  background:linear-gradient(135deg,#ff8c00,#f72585);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.header p {
+  color:#64748b;
+  margin-top:10px;
+}
+
+/* CARDS */
+.grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+
+.card {
+  background:white;
+  border-radius:26px;
+  padding:30px;
+  transition:0.4s;
+  box-shadow:0 12px 30px rgba(0,0,0,0.05);
+  position:relative;
+  overflow:hidden;
+}
+
+.card::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,#ff8c00,#f72585);
+  opacity:0;
+  transition:0.4s;
+}
+
+.card:hover::after {
+  opacity:0.08;
+}
+
+.card:hover {
+  transform:translateY(-8px);
+}
+
+.card h3 {
+  font-size:1.2rem;
+  margin-bottom:10px;
+}
+
+.card p {
+  color:#64748b;
+  font-size:0.9rem;
+}
+
+/* FLOW SECTION */
+.flow {
+  margin-top:70px;
+  background:white;
+  border-radius:30px;
+  padding:40px;
+  box-shadow:0 15px 35px rgba(0,0,0,0.05);
+}
+
+.flow h2 {
+  text-align:center;
+  margin-bottom:30px;
+  font-weight:800;
+}
+
+.steps {
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.step {
+  flex:1;
+  min-width:180px;
+  text-align:center;
+}
+
+.circle {
+  width:60px;
+  height:60px;
+  margin:auto;
+  border-radius:50%;
+  background:linear-gradient(135deg,#ff8c00,#f72585);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-weight:800;
+  margin-bottom:12px;
+}
+
+.step p {
+  font-size:0.85rem;
+  color:#64748b;
+}
+
+@media(max-width:900px){
+  .grid { grid-template-columns:1fr; }
+  .steps { flex-direction:column; }
+}
+.back-btn {
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-right: 15px;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  color: #ff8c00;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a href="index.html" class="back-btn">← Back</a>
+  <div class="nav-logo">SGMS <span>Elite</span></div>
+</nav>
+
+<div class="container">
+
+  <div class="header">
+    <h1>System <span>Governance</span></h1>
+    <p>Ensuring fairness, transparency, and accountability in grievance handling.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Fair Allocation</h3>
+      <p>Complaints are automatically assigned to the correct department.</p>
+    </div>
+
+    <div class="card">
+      <h3>Secure Handling</h3>
+      <p>Every complaint is handled with strict confidentiality.</p>
+    </div>
+
+    <div class="card">
+      <h3>Tracked Resolution</h3>
+      <p>Each step is monitored until the issue is resolved.</p>
+    </div>
+  </div>
+
+  <div class="flow">
+    <h2>Grievance Flow</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="circle">1</div>
+        <p>Submit Complaint</p>
+      </div>
+      <div class="step">
+        <div class="circle">2</div>
+        <p>Department Review</p>
+      </div>
+      <div class="step">
+        <div class="circle">3</div>
+        <p>Action Taken</p>
+      </div>
+      <div class="step">
+        <div class="circle">4</div>
+        <p>Resolution</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

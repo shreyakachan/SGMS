@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGMS Elite | Institutional Command</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-orange: #ff8c00; --deep-orange: #e67e00;
+      --accent-amber: #fff7ed; --bg-white: #ffffff;
+      --bg-light: #fcfcfd; --text-dark: #0f172a;
+      --text-slate: #64748b; --border-light: #f1f5f9;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background: var(--bg-light); color: var(--text-dark); display: flex; min-height: 100vh; }
+
+    .sidebar { width: 270px; background: var(--bg-white); border-right: 2px solid var(--border-light); padding: 36px 22px; display: flex; flex-direction: column; position: fixed; height: 100vh; }
+    .logo { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; text-decoration: none; color: var(--text-dark); letter-spacing: -1.5px; display: block; }
+    .logo span { color: var(--primary-orange); }
+    .admin-badge { display: inline-block; background: #fff7ed; color: var(--primary-orange); font-size: 0.65rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 34px; }
+    .nav-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: #cbd5e1; margin-bottom: 14px; font-weight: 700; }
+    .nav-item { padding: 12px 16px; border-radius: 14px; text-decoration: none; color: var(--text-slate); font-weight: 600; margin-bottom: 5px; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 0.88rem; }
+    .nav-item:hover, .nav-item.active { background: var(--accent-amber); color: var(--primary-orange); }
+    .nav-item.logout { color: #ef4444; margin-top: auto; }
+    .nav-item.logout:hover { background: #fff1f2; color: #dc2626; }
+
+    .main-content { margin-left: 270px; flex: 1; padding: 44px; }
+    .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 36px; }
+    .header-section h1 { font-size: 2rem; font-weight: 800; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 28px; }
+    .stat-card { background: white; border-radius: 22px; padding: 22px 26px; border: 1px solid var(--border-light); }
+    .stat-value { font-size: 2.1rem; font-weight: 800; color: var(--primary-orange); }
+    .stat-label { font-size: 0.7rem; color: var(--text-slate); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    .card { background: var(--bg-white); border-radius: 26px; padding: 26px; border: 1px solid var(--border-light); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .card-header h3 { font-size: 0.98rem; font-weight: 800; }
+
+    table { width: 100%; border-collapse: separate; border-spacing: 0 9px; }
+    th { text-align: left; padding: 10px 12px; color: var(--text-slate); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+    td { background: var(--bg-white); padding: 15px 12px; font-size: 0.86rem; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); }
+    td:first-child { border-left: 1px solid var(--border-light); border-radius: 13px 0 0 13px; font-weight: 700; }
+    td:last-child  { border-right: 1px solid var(--border-light); border-radius: 0 13px 13px 0; }
+
+    .status-badge { padding: 4px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 800; white-space: nowrap; }
+    .s-Pending      { background: #fff7ed; color: #c2410c; }
+    .s-Under-Review { background: #eff6ff; color: #1d4ed8; }
+    .s-Resolved     { background: #f0fdf4; color: #15803d; }
+    .s-Closed       { background: #f8fafc; color: #64748b; }
+
+    .btn-orange { background: var(--primary-orange); color: white; border: none; padding: 9px 18px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.8rem; transition: 0.2s; }
+    .btn-orange:hover { background: var(--deep-orange); }
+    .btn-sm { padding: 6px 14px; border-radius: 8px; font-size: 0.74rem; font-weight: 700; border: none; cursor: pointer; background: #fff7ed; color: var(--primary-orange); transition: 0.2s; }
+    .btn-sm:hover { background: var(--primary-orange); color: white; }
+
+    .empty-state { text-align: center; padding: 50px 20px; color: var(--text-slate); }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 1000; display: none; justify-content: center; align-items: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: white; border-radius: 26px; padding: 34px; width: 500px; max-width: 95vw; box-shadow: 0 30px 60px rgba(0,0,0,0.14); animation: popIn 0.3s ease; }
+    @keyframes popIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+    .modal h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 22px; }
+    .modal-field { margin-bottom: 14px; }
+    .modal-field label { display: block; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-slate); margin-bottom: 6px; }
+    .modal-field select, .modal-field textarea { width: 100%; padding: 12px 16px; border-radius: 12px; border: 2px solid #f1f5f9; font-size: 0.9rem; outline: none; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.2s; background: #f8fafc; }
+    .modal-field select:focus, .modal-field textarea:focus { border-color: var(--primary-orange); background: white; }
+    .modal-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+    .btn-cancel { background: #f1f5f9; color: var(--text-slate); border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+    .btn-save { background: var(--primary-orange); color: white; border: none; padding: 10px 22px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+    .btn-save:hover { background: var(--deep-orange); }
+
+    .toast { position: fixed; bottom: 28px; right: 28px; background: #0f172a; color: white; padding: 13px 22px; border-radius: 13px; font-weight: 700; font-size: 0.85rem; z-index: 9999; transform: translateY(80px); opacity: 0; transition: 0.4s cubic-bezier(0.23,1,0.32,1); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <a href="index.html" class="logo">SGMS <span>Elite</span></a>
+  <span class="admin-badge" id="adminRoleBadge">Admin</span>
+  <div class="nav-label">Main Console</div>
+  <a href="admindashboard.html" class="nav-item active">🏠 System Overview</a>
+  <a href="reports.html" class="nav-item">🛡️ Vigilance Center</a>
+  <div class="nav-label" style="margin-top:24px;">Administration</div>
+  <a href="staffworkflow.html" class="nav-item">👥 Faculty Node</a>
+  <a href="#" class="nav-item logout" onclick="logout()">🚪 Logout</a>
+</div>
+
+<div class="main-content">
+  <div class="header-section">
+    <div>
+      <h1>Executive Command</h1>
+      <p style="color:var(--text-slate);margin-top:4px;font-size:0.88rem;">SIES GST — Student Grievance Management System</p>
+    </div>
+    <span id="adminNameBadge" style="background:#f1f5f9;padding:10px 20px;border-radius:14px;font-weight:700;font-size:0.85rem;">Loading...</span>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-value" id="statTotal">—</div><div class="stat-label">Total</div></div>
+    <div class="stat-card"><div class="stat-value" id="statPending" style="color:#c2410c;">—</div><div class="stat-label">Pending</div></div>
+    <div class="stat-card"><div class="stat-value" id="statReview" style="color:#1d4ed8;">—</div><div class="stat-label">Under Review</div></div>
+    <div class="stat-card"><div class="stat-value" id="statResolved" style="color:#15803d;">—</div><div class="stat-label">Resolved</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Active Complaint Stream</h3>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <select id="filterStatus" onchange="applyFilter()" style="padding:8px 14px;border-radius:10px;border:1px solid var(--border-light);font-weight:700;font-size:0.78rem;outline:none;background:#f8fafc;">
+          <option value="">All Status</option>
+          <option value="Pending">Pending</option>
+          <option value="Under Review">Under Review</option>
+          <option value="Resolved">Resolved</option>
+          <option value="Closed">Closed</option>
+        </select>
+        <button class="btn-orange" onclick="loadComplaints()">🔄 Refresh</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Student</th><th>PRN</th><th>Case ID</th>
+          <th>Subject</th><th>Dept</th><th>Date</th>
+          <th>Status</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="complaintTable">
+        <tr><td colspan="8" class="empty-state">Loading complaints...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- UPDATE MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Update Complaint</h3>
+    <input type="hidden" id="modalId">
+    <div class="modal-field">
+      <label>New Status</label>
+      <select id="modalStatus">
+        <option>Pending</option>
+        <option>Under Review</option>
+        <option>Resolved</option>
+        <option>Closed</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Admin Note (optional)</label>
+      <textarea id="modalNote" rows="3" placeholder="Resolution note or comment..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveUpdate()">Save Update</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API   = 'http://localhost:8080/api';
+  const token = sessionStorage.getItem('adminToken');
+  const admin = JSON.parse(sessionStorage.getItem('adminData') || '{}');
+
+  if (!token) { alert('Please log in as admin.'); window.location.href = 'login.html'; }
+
+  document.getElementById('adminNameBadge').textContent  = '👋 ' + (admin.name || 'Admin');
+  document.getElementById('adminRoleBadge').textContent  = admin.role === 'super_admin' ? 'Super Admin' : 'Faculty';
+
+  let allComplaints = [];
+
+  async function loadComplaints() {
+    try {
+      const [cRes, sRes] = await Promise.all([
+        fetch(`${API}/complaints`,       { headers: { Authorization: 'Bearer ' + token } }),
+        fetch(`${API}/complaints/stats`, { headers: { Authorization: 'Bearer ' + token } })
+      ]);
+
+      if (cRes.status === 401) { logout(); return; }
+      if (!cRes.ok) throw new Error('Server error');
+
+      allComplaints = await cRes.json();
+      const stats   = await sRes.json();
+
+      document.getElementById('statTotal').textContent    = stats.total       || 0;
+      document.getElementById('statPending').textContent  = stats.pending     || 0;
+      document.getElementById('statReview').textContent   = stats.underReview || 0;
+      document.getElementById('statResolved').textContent = stats.resolved    || 0;
+
+      renderTable(allComplaints);
+    } catch (e) {
+      document.getElementById('complaintTable').innerHTML =
+        '<tr><td colspan="8" class="empty-state">⚠️ Cannot load data. Is the server running?</td></tr>';
+    }
+  }
+
+  function applyFilter() {
+    const f = document.getElementById('filterStatus').value;
+    renderTable(f ? allComplaints.filter(c => c.status === f) : allComplaints);
+  }
+
+  function renderTable(list) {
+    const tb = document.getElementById('complaintTable');
+    if (!list.length) {
+      tb.innerHTML = '<tr><td colspan="8" class="empty-state">📭 No complaints found.</td></tr>'; return;
+    }
+    tb.innerHTML = list.map(c => {
+      const name  = c.student?.name  || 'Unknown';
+      const prn   = c.student?.prn   || '—';
+      const dept  = c.department     || '—';
+      const date  = new Date(c.createdAt).toLocaleDateString('en-IN', { day:'2-digit', month:'short' });
+      const key   = c.status.replace(' ', '-');
+      const badge = `<span class="status-badge s-${key}">${c.status}</span>`;
+
+      return `<tr>
+        <td>${name}</td>
+        <td style="color:var(--text-slate);font-weight:600;">${prn}</td>
+        <td style="font-family:monospace;color:var(--text-slate);">#${c._id.slice(-5).toUpperCase()}</td>
+        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${c.title}">${c.title}</td>
+        <td style="color:var(--text-slate);font-weight:600;">${dept}</td>
+        <td style="color:var(--text-slate);">${date}</td>
+        <td>${badge}</td>
+        <td><button class="btn-sm" onclick="openModal('${c._id}','${c.status}')">Update</button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  function openModal(id, status) {
+    document.getElementById('modalId').value     = id;
+    document.getElementById('modalStatus').value = status;
+    document.getElementById('modalNote').value   = '';
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+  async function saveUpdate() {
+    const id     = document.getElementById('modalId').value;
+    const status = document.getElementById('modalStatus').value;
+    const note   = document.getElementById('modalNote').value.trim();
+    try {
+      const res  = await fetch(`${API}/complaints/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+        body: JSON.stringify({ status, adminNote: note })
+      });
+      const data = await res.json();
+      if (!res.ok) { showToast('❌ ' + data.message); return; }
+      closeModal();
+      showToast('✅ Updated successfully!');
+      loadComplaints();
+    } catch (e) { showToast('❌ Server error.'); }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id === 'modalOverlay') closeModal(); });
+  loadComplaints();
+</script>
+</body>
+</html>

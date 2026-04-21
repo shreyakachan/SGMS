@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elite | My Analytics</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background: #fff5f0; padding: 50px; min-height: 100vh; }
+
+    .header { text-align: center; margin-bottom: 46px; }
+    .header h1 { color: #4a041a; font-size: 2.3rem; font-weight: 800; letter-spacing: -1.5px; }
+    .header h1 span { background: linear-gradient(135deg,#f72585,#ffb703); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header p { color: #8a6a76; font-weight: 600; margin-top: 6px; font-size: 0.88rem; }
+
+    .back-link { display: inline-block; margin-bottom: 30px; color: #f72585; font-weight: 700; font-size: 0.85rem; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+
+    .grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 26px; max-width: 1060px; margin: 0 auto; }
+
+    .ana-card {
+      background: #fff; padding: 36px; border-radius: 36px;
+      border: 1px solid #ffdeeb; text-align: center;
+      box-shadow: 0 12px 32px rgba(247,37,133,0.05); transition: 0.3s;
+    }
+    .ana-card:hover { transform: translateY(-8px); border-color: #f72585; }
+
+    .value { font-size: 2.8rem; font-weight: 800; background: linear-gradient(135deg,#f72585,#ffb703); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .label { color: #8a6a76; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; font-size: 0.75rem; }
+
+    .chart-card {
+      grid-column: span 3;
+      background: white; border-radius: 44px;
+      padding: 36px; border: 1px solid #ffdeeb;
+    }
+    .chart-card h3 { color: #4a041a; font-size: 1rem; font-weight: 800; margin-bottom: 20px; }
+
+    .complaints-list { grid-column: span 3; background: white; border-radius: 40px; padding: 36px; border: 1px solid #ffdeeb; }
+    .complaints-list h3 { color: #4a041a; font-size: 1rem; font-weight: 800; margin-bottom: 20px; }
+
+    .complaint-item {
+      padding: 18px 20px; border-radius: 18px; border: 1px solid #ffdeeb;
+      margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
+      transition: 0.3s;
+    }
+    .complaint-item:hover { border-color: #f72585; background: #fff9f7; }
+    .complaint-title { font-weight: 700; color: #4a041a; font-size: 0.92rem; }
+    .complaint-meta  { color: #8a6a76; font-size: 0.78rem; margin-top: 3px; }
+
+    .status-badge { padding: 5px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 800; white-space: nowrap; }
+    .s-Pending      { background: #fff7ed; color: #c2410c; }
+    .s-Under-Review { background: #eff6ff; color: #1d4ed8; }
+    .s-Resolved     { background: #f0fdf4; color: #15803d; }
+    .s-Closed       { background: #f8fafc; color: #64748b; }
+
+    .empty-state { text-align: center; padding: 40px; color: #8a6a76; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div style="max-width:1060px;margin:0 auto;">
+  <a href="student-hub.html" class="back-link">← Back to Hub</a>
+  <div class="header">
+    <h1>My <span>Grievance</span> History ✨</h1>
+    <p>Track all your filed complaints and their resolution status</p>
+  </div>
+
+  <div class="grid">
+    <div class="ana-card"><div class="value" id="statTotal">—</div><div class="label">Total Filed</div></div>
+    <div class="ana-card"><div class="value" id="statResolved">—</div><div class="label">Resolved</div></div>
+    <div class="ana-card"><div class="value" id="statPending">—</div><div class="label">Pending</div></div>
+
+    <div class="chart-card">
+      <h3>Complaint Status Breakdown</h3>
+      <canvas id="statusChart" height="90"></canvas>
+    </div>
+
+    <div class="complaints-list">
+      <h3>All My Complaints</h3>
+      <div id="complaintsList"><div class="empty-state">Loading...</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API     = 'http://localhost:8080/api';
+  const token   = sessionStorage.getItem('studentToken');
+  if (!token) { window.location.href = 'student-login.html'; }
+
+  let chartInstance = null;
+
+  async function loadData() {
+    try {
+      const [cRes, sRes] = await Promise.all([
+        fetch(`${API}/complaints`,       { headers: { Authorization: 'Bearer ' + token } }),
+        fetch(`${API}/complaints/stats`, { headers: { Authorization: 'Bearer ' + token } })
+      ]);
+
+      if (cRes.status === 401) { sessionStorage.clear(); window.location.href = 'student-login.html'; return; }
+
+      const complaints = await cRes.json();
+      const stats      = await sRes.json();
+
+      document.getElementById('statTotal').textContent    = stats.total    || 0;
+      document.getElementById('statResolved').textContent = stats.resolved || 0;
+      document.getElementById('statPending').textContent  = stats.pending  || 0;
+
+      renderChart(stats);
+      renderList(complaints);
+    } catch (e) {
+      document.getElementById('complaintsList').innerHTML =
+        '<div class="empty-state">⚠️ Cannot load data. Is the server running?</div>';
+    }
+  }
+
+  function renderChart(stats) {
+    const ctx = document.getElementById('statusChart').getContext('2d');
+    if (chartInstance) chartInstance.destroy();
+    chartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Pending', 'Under Review', 'Resolved', 'Closed'],
+        datasets: [{
+          data: [stats.pending || 0, stats.underReview || 0, stats.resolved || 0, stats.closed || 0],
+          backgroundColor: ['#fff7ed', '#eff6ff', '#f0fdf4', '#f8fafc'],
+          borderColor:     ['#f97316', '#3b82f6', '#22c55e', '#94a3b8'],
+          borderWidth: 2, borderRadius: 10
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Plus Jakarta Sans', weight: '700' } }, grid: { color: '#fff0f6' } },
+          x: { ticks: { font: { family: 'Plus Jakarta Sans', weight: '700' } }, grid: { display: false } }
+        }
+      }
+    });
+  }
+
+  function renderList(list) {
+    const el = document.getElementById('complaintsList');
+    if (!list.length) {
+      el.innerHTML = '<div class="empty-state">📭 No complaints filed yet. <a href="file-complaint.html" style="color:#f72585;font-weight:800;">File one now →</a></div>';
+      return;
+    }
+    el.innerHTML = list.map(c => {
+      const date = new Date(c.createdAt).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+      const key  = c.status.replace(' ', '-');
+      return `
+        <div class="complaint-item">
+          <div>
+            <div class="complaint-title">${c.title}</div>
+            <div class="complaint-meta">${c.department} &bull; ${date}</div>
+          </div>
+          <span class="status-badge s-${key}">${c.status}</span>
+        </div>`;
+    }).join('');
+  }
+
+  loadData();
+</script>
+</body>
+</html>
